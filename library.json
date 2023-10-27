@@ -1,6 +1,6 @@
 {
     "name": "NVSDatabase",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "description": "The \"NVSDatabase\" library is a C++ library that provides an interface for working with the ESP-IDF's Non-volatile Storage (NVS) API. NVS is used for storing configuration data and other non-volatile information on ESP32 and ESP8266 microcontrollers.",
     "keywords": "NVS Database, ESP32 Storage, ESP8266 NVS, Non-volatile Storage, NVS API, Key-Value Storage, ESP-IDF NVS, NVS Library, ronny, antoon, MetaHouse",
     "repository": {
