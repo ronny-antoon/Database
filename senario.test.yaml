@@ -1,6 +1,6 @@
-name: Pushbutton counter test
+name: Senario Test
 version: 1
-author: Uri Shaked
+author: Ronny Antoon
 
 steps:
   - wait-serial: 'Finished all tests!'
