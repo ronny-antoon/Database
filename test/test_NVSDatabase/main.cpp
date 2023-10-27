@@ -31,7 +31,7 @@ void loop()
 
 TEST(Example, EmptyTest)
 {
-    ASSERT_TRUE(true);
+    ASSERT_TRUE(false);
 }
 
 int main(int argc, char **argv)
