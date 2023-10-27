@@ -13,7 +13,7 @@
 
 TEST(Example, EmptyTest)
 {
-    ASSERT_TRUE(true);
+    ASSERT_TRUE(false);
 }
 
 void setup()
