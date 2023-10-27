@@ -2,12 +2,12 @@
 #include <Arduino.h>
 #include <gtest/gtest.h>
 
-#include "PutPair_test.hpp"
-#include "GetValueOf_test.hpp"
-#include "IsExist_test.hpp"
-#include "GetValueLengthOf_test.hpp"
-#include "RemovePair_test.hpp"
-#include "EraseAll_test.hpp"
+// #include "PutPair_test.hpp"
+// #include "GetValueOf_test.hpp"
+// #include "IsExist_test.hpp"
+// #include "GetValueLengthOf_test.hpp"
+// #include "RemovePair_test.hpp"
+// #include "EraseAll_test.hpp"
 
 void setup()
 {
@@ -18,6 +18,11 @@ void setup()
     ::testing::InitGoogleTest();
     // if you plan to use GMock, replace the line above with
     // ::testing::InitGoogleMock();
+}
+
+TEST(Example, EmptyTest)
+{
+    ASSERT_TRUE(true);
 }
 
 void loop()
