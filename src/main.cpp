@@ -4,12 +4,12 @@
 #include <Arduino.h>
 #include <gtest/gtest.h>
 
-#include "..\test\test_NVSDatabase\PutPair_test.hpp"
-#include "..\test\test_NVSDatabase\GetValueOf_test.hpp"
-#include "..\test\test_NVSDatabase\IsExist_test.hpp"
-#include "..\test\test_NVSDatabase\GetValueLengthOf_test.hpp"
-#include "..\test\test_NVSDatabase\RemovePair_test.hpp"
-#include "..\test\test_NVSDatabase\EraseAll_test.hpp"
+#include "../test/test_NVSDatabase/PutPair_test.hpp"
+#include "../test/test_NVSDatabase/GetValueOf_test.hpp"
+#include "../test/test_NVSDatabase/IsExist_test.hpp"
+#include "../test/test_NVSDatabase/GetValueLengthOf_test.hpp"
+#include "../test/test_NVSDatabase/RemovePair_test.hpp"
+#include "../test/test_NVSDatabase/EraseAll_test.hpp"
 
 TEST(Example, EmptyTest)
 {
