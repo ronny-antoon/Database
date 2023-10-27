@@ -11,11 +11,25 @@
  * @warning This class is not thread safe. To ensure thread safety, external synchronization mechanisms.
  */
 
-#include "DatabaseStorage.hpp"
 #include <nvs.h>
 
 #define NVS_MAX_KEY_LENGTH 16     // Maximum length of a key in NVS including the null terminator.
 #define NVS_MAX_VALUE_LENGTH 4000 // Maximum length of a value in NVS
+
+// Error codes for database
+enum DatabaseError_t
+{
+    DATABASE_OK,                 // No error
+    DATABASE_ERROR,              // General database error
+    DATABASE_NOT_FOUND,          // Key not found
+    DATABASE_FILE_NOT_FOUND,     // File not found
+    DATABASE_OPEN_ERROR,         // Error while opening the database
+    DATABASE_KEY_INVALID_SIZE,   // Invalid key size
+    DATABASE_VALUE_INVALID_SIZE, // Invalid buffer size
+    DATABASE_TIMEOUT,            // Timeout error
+    DATABASE_KEY_EMPTY,          // Key is empty
+    DATABASE_VALUE_EMPTY,        // Value is empty
+};
 
 /**
  * @brief NVSDatabase - class for NVS database storage.
@@ -26,7 +40,7 @@
  * @warning This class is not thread safe. To ensure thread safety, external synchronization mechanisms
  * should be used when accessing the NVSDatabase instance from multiple threads.
  */
-class NVSDatabase : public DatabaseStorage
+class NVSDatabase
 {
 private:
     nvs_handle_t nvsHandle;   // Handle for NVS
@@ -74,7 +88,7 @@ public:
     /**
      * @brief Destructor for the NVSDatabase object.
      */
-    ~NVSDatabase() override;
+    ~NVSDatabase();
 
     /**
      * @brief Check if a key exists in the NVS database.
@@ -89,7 +103,7 @@ public:
      * - DATABASE_NOT_FOUND if the specified key was not found in the database.
      * - DATABASE_ERROR else.
      */
-    DatabaseError_t isExist(const char *_key) override;
+    DatabaseError_t isExist(const char *_key);
 
     /**
      * @brief Store a key-value pair in the NVS database.
@@ -106,7 +120,7 @@ public:
      * - DATABASE_OPEN_ERROR if the database opening failed.
      * - DATABASE_ERROR else.
      */
-    DatabaseError_t putPair(const char *_key, const char *_value) override;
+    DatabaseError_t putPair(const char *_key, const char *_value);
 
     /**
      * @brief Retrieve the value associated with a key from the NVS database.
@@ -123,7 +137,7 @@ public:
      * - DATABASE_NOT_FOUND if the specified key was not found in the database.
      * - DATABASE_VALUE_INVALID_SIZE if the _maxSize is not sufficient for the value.
      */
-    DatabaseError_t getValueOf(const char *_key, char *_value, size_t *_maxSize) override;
+    DatabaseError_t getValueOf(const char *_key, char *_value, size_t *_maxSize);
 
     /**
      * @brief Get the length of the value associated with a key in the NVS database.
@@ -138,7 +152,7 @@ public:
      * - DATABASE_ERROR if there was an issue with the database.
      * - DATABASE_NOT_FOUND if the specified key was not found in the database.
      */
-    DatabaseError_t getValueLengthOf(const char *_key, size_t *_requiredLength) override;
+    DatabaseError_t getValueLengthOf(const char *_key, size_t *_requiredLength);
 
     /**
      * @brief Remove a key-value pair from the NVS database.
@@ -152,7 +166,7 @@ public:
      * - DATABASE_NOT_FOUND if the specified key was not found in the database.
      * - DATABASE_ERROR else.
      */
-    DatabaseError_t removePair(const char *_key) override;
+    DatabaseError_t removePair(const char *_key);
 
     /**
      * @brief Erase all values from the NVS database within the specified namespace.
@@ -161,7 +175,7 @@ public:
      * - DATABASE_OK if the values were successfully erased.
      * - DATABASE_ERROR else.
      */
-    DatabaseError_t eraseAll() override;
+    DatabaseError_t eraseAll();
 };
 
 #endif // NVSDATABASE_H
