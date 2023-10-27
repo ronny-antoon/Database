@@ -31,7 +31,7 @@ jobs:
       - name: Test Embeded
         uses: wokwi/wokwi-ci-action@v1
         with:
-          token: wok_Y6gl7x8JbdDvPiuZmNt0cqqHQP21eGFQ20147576
+          token: ${{ secrets.WOKWI_CLI_TOKEN }}
           fail_text: FAILED
           scenario: 'senario.test.yaml'
           
