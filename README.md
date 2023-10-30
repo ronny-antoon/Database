@@ -115,3 +115,4 @@ This library was created by Ronny Antoon. You can contact me at [ronny.antoon@gm
 https://registry.platformio.org/libraries/ronny-antoon/NVSDatabase
 
 For more information on the ESP-IDF's NVS API, refer to the [official documentationy](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/storage/nvs_flash.html)
+
