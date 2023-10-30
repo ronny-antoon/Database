@@ -4,7 +4,8 @@
 #include <Arduino.h>
 #include <gtest/gtest.h>
 
-#include "IncludeAll_test.hpp"
+#include "test_DatabaseAPI/IncludeAll_test.hpp"
+#include "test_NVSDelegate/IncludeAll_test.hpp"
 
 void setup()
 {

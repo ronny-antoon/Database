@@ -10,7 +10,7 @@
 #include "DatabaseAPI.hpp"
 #include "DatabaseError.hpp"
 
-class EraseAll_test : public ::testing::Test
+class EraseAll_API_test : public ::testing::Test
 {
 protected:
     DatabaseDelegateInterface *nvsDelegate;
@@ -30,7 +30,7 @@ protected:
 };
 
 // Test case: Successfully erase all key-value pairs within the namespace.
-TEST_F(EraseAll_test, Erase_All_Keys)
+TEST_F(EraseAll_API_test, Erase_All_Keys)
 {
     // Add some key-value pairs
     myDatabase->set("key1", "value1");

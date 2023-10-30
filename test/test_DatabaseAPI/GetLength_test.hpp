@@ -10,7 +10,7 @@
 #include "DatabaseAPI.hpp"
 #include "DatabaseError.hpp"
 
-class getLenght_test : public ::testing::Test
+class getLenght_API_test : public ::testing::Test
 {
 protected:
     DatabaseDelegateInterface *nvsDelegate;
@@ -29,7 +29,7 @@ protected:
     }
 };
 // Test case: Attempt to get the value length with an empty or null key.
-TEST_F(getLenght_test, Empty_Null_Key)
+TEST_F(getLenght_API_test, Empty_Null_Key)
 {
     // Call the method with an empty key
     size_t requiredLength;
@@ -46,7 +46,7 @@ TEST_F(getLenght_test, Empty_Null_Key)
 }
 
 // Test case: Attempt to get the value length with a key that exceeds the maximum allowed size.
-TEST_F(getLenght_test, Invalid_Size_Key)
+TEST_F(getLenght_API_test, Invalid_Size_Key)
 {
     // Create a key that exceeds the maximum size
     const char *key = "ThisIsAnInvalidKeyThatExceedsTheMaximumSize";
@@ -60,7 +60,7 @@ TEST_F(getLenght_test, Invalid_Size_Key)
 }
 
 // Test case: Attempt to get the value length for a non-existing key.
-TEST_F(getLenght_test, NonExisting_Key)
+TEST_F(getLenght_API_test, NonExisting_Key)
 {
     // Call the method to get the value length for a non-existing key
     size_t requiredLength;
@@ -71,7 +71,7 @@ TEST_F(getLenght_test, NonExisting_Key)
 }
 
 // Test case: Successfully get the value length with an existing key.
-TEST_F(getLenght_test, Existing_Key)
+TEST_F(getLenght_API_test, Existing_Key)
 {
     // Add a key-value pair
     myDatabase->set("existing_key", "existing_value");

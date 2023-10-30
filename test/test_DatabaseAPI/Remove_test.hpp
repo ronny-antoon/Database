@@ -10,7 +10,7 @@
 #include "DatabaseAPI.hpp"
 #include "DatabaseError.hpp"
 
-class Remove_test : public ::testing::Test
+class Remove_API_test : public ::testing::Test
 {
 protected:
     DatabaseDelegateInterface *nvsDelegate;
@@ -30,7 +30,7 @@ protected:
 };
 
 // Test case: Attempt to remove a pair with an empty or null key.
-TEST_F(Remove_test, Empty_Null_Key)
+TEST_F(Remove_API_test, Empty_Null_Key)
 {
     // Call the method with an empty key
     DatabaseError_t result = myDatabase->remove("");
@@ -46,7 +46,7 @@ TEST_F(Remove_test, Empty_Null_Key)
 }
 
 // Test case: Attempt to remove a pair with a key that exceeds the maximum allowed size.
-TEST_F(Remove_test, Invalid_Size_Key)
+TEST_F(Remove_API_test, Invalid_Size_Key)
 {
     // Create a key that exceeds the maximum size
     const char *key = "ThisIsAnInvalidKeyThatExceedsTheMaximumSize";
@@ -59,7 +59,7 @@ TEST_F(Remove_test, Invalid_Size_Key)
 }
 
 // Test case: Attempt to remove a non-existing key-value pair.
-TEST_F(Remove_test, NonExisting_Key)
+TEST_F(Remove_API_test, NonExisting_Key)
 {
     // Call the method to remove a non-existing key-value pair
     DatabaseError_t result = myDatabase->remove("nonExistingKey");
@@ -69,7 +69,7 @@ TEST_F(Remove_test, NonExisting_Key)
 }
 
 // Test case: Successfully remove an existing key-value pair.
-TEST_F(Remove_test, Existing_Key)
+TEST_F(Remove_API_test, Existing_Key)
 {
     // Add a key-value pair
     myDatabase->set("existing_key", "existing_value");
@@ -87,4 +87,4 @@ TEST_F(Remove_test, Existing_Key)
     ASSERT_EQ(result, DATABASE_KEY_NOT_FOUND);
 }
 
-#endif
+#endif // REMOVE_TEST_H

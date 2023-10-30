@@ -10,7 +10,7 @@
 #include "DatabaseAPI.hpp"
 #include "DatabaseError.hpp"
 
-class Get_test : public ::testing::Test
+class Get_API_test : public ::testing::Test
 {
 protected:
     DatabaseDelegateInterface *nvsDelegate;
@@ -30,7 +30,7 @@ protected:
 };
 
 // Test case: Attempt to retrieve a value with an empty or null key.
-TEST_F(Get_test, Empty_Null_Key)
+TEST_F(Get_API_test, Empty_Null_Key)
 {
     char value[100];
     size_t maxSize = 100;
@@ -48,7 +48,7 @@ TEST_F(Get_test, Empty_Null_Key)
 }
 
 // Test case: Attempt to retrieve a value with a key that exceeds the maximum allowed size.
-TEST_F(Get_test, Invalid_Size_Key)
+TEST_F(Get_API_test, Invalid_Size_Key)
 {
     char value[100];
     size_t maxSize = 100;
@@ -62,7 +62,7 @@ TEST_F(Get_test, Invalid_Size_Key)
 }
 
 // Test case: Attempt to retrieve a value with a buffer size that is too small.
-TEST_F(Get_test, Value_Buffer_Too_Small)
+TEST_F(Get_API_test, Value_Buffer_Too_Small)
 {
     // Add a key-value pair
     myDatabase->set("small_buffer", "small_buffer_value");
@@ -77,7 +77,7 @@ TEST_F(Get_test, Value_Buffer_Too_Small)
 }
 
 // Test case: Attempt to retrieve a value with a null value buffer.
-TEST_F(Get_test, Null_Value_Buffer)
+TEST_F(Get_API_test, Null_Value_Buffer)
 {
     // Insert a key-value pair
     DatabaseError_t result = myDatabase->set("null_value", "null_value");
@@ -94,7 +94,7 @@ TEST_F(Get_test, Null_Value_Buffer)
 }
 
 // Test case: Attempt to retrieve a value with a null maxSize.
-TEST_F(Get_test, Null_MaxSize)
+TEST_F(Get_API_test, Null_MaxSize)
 {
     // Insert a key-value pair
     DatabaseError_t result = myDatabase->set("null_maxsize", "null_maxsize");
@@ -112,7 +112,7 @@ TEST_F(Get_test, Null_MaxSize)
 }
 
 // Test case: Successfully retrieve a value with an existing key.
-TEST_F(Get_test, Existing_Key)
+TEST_F(Get_API_test, Existing_Key)
 {
     // Add a key-value pair
     myDatabase->set("existing_key", "existing_value");
@@ -129,7 +129,7 @@ TEST_F(Get_test, Existing_Key)
 }
 
 // Test case: Attempt to retrieve a value for a non-existing key.
-TEST_F(Get_test, NonExisting_Key)
+TEST_F(Get_API_test, NonExisting_Key)
 {
     char value[100];
     size_t maxSize = 100;
@@ -141,7 +141,7 @@ TEST_F(Get_test, NonExisting_Key)
 }
 
 // Test case: Successfully retrieve a value and ensure it matches the expected value.
-TEST_F(Get_test, Value_Retrieved_Correctly)
+TEST_F(Get_API_test, Value_Retrieved_Correctly)
 {
     // Add a key-value pair
     myDatabase->set("key_to_retrieve", "value_to_retrieve");

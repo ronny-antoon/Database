@@ -10,7 +10,7 @@
 #include "DatabaseAPI.hpp"
 #include "DatabaseError.hpp"
 
-class Set_test : public ::testing::Test
+class Set_API_test : public ::testing::Test
 {
 protected:
     DatabaseDelegateInterface *nvsDelegate;
@@ -30,7 +30,7 @@ protected:
 };
 
 // Test case: Attempt to store a key-value pair with an empty or null key.
-TEST_F(Set_test, Empty_Null_Key)
+TEST_F(Set_API_test, Empty_Null_Key)
 {
     // Call the method with an empty key and a non-empty value
     DatabaseError_t result = myDatabase->set("", "non_empty_value");
@@ -46,7 +46,7 @@ TEST_F(Set_test, Empty_Null_Key)
 }
 
 // Test case: Attempt to store a key-value pair with a key that exceeds the maximum allowed size.
-TEST_F(Set_test, Invalid_Size_Key)
+TEST_F(Set_API_test, Invalid_Size_Key)
 {
     // Create a key that exceeds the maximum size
     const char *key = "ThisIsAnInvalidKeyThatExceedsTheMaximumSize";
@@ -58,7 +58,7 @@ TEST_F(Set_test, Invalid_Size_Key)
 }
 
 // Test case: Attempt to store a key-value pair with an empty or null value.
-TEST_F(Set_test, Empty_Null_Value)
+TEST_F(Set_API_test, Empty_Null_Value)
 {
     // Call the method with a non-empty key and an empty value
     DatabaseError_t result = myDatabase->set("non_empty_key", "");
@@ -74,7 +74,7 @@ TEST_F(Set_test, Empty_Null_Value)
 }
 
 // Test case: Attempt to store a key-value pair with a value that exceeds the maximum allowed size.
-TEST_F(Set_test, Invalid_Size_Value)
+TEST_F(Set_API_test, Invalid_Size_Value)
 {
     // Create a value that exceeds the maximum size
     char value[5000];
@@ -91,7 +91,7 @@ TEST_F(Set_test, Invalid_Size_Value)
 }
 
 // Test case: Successfully store a key-value pair with valid key and value.
-TEST_F(Set_test, Valid_Key_Value)
+TEST_F(Set_API_test, Valid_Key_Value)
 {
     // Call the method to store a valid key-value pair
     DatabaseError_t result = myDatabase->set("valid_key", "valid_value");
@@ -107,7 +107,7 @@ TEST_F(Set_test, Valid_Key_Value)
 }
 
 // Test case: Successfully store a key-value pair with existing key, and check if the value is updated.
-TEST_F(Set_test, Existing_Key)
+TEST_F(Set_API_test, Existing_Key)
 {
     // Call the method to store a valid key-value pair
     DatabaseError_t result = myDatabase->set("existing_key", "existing_value");
