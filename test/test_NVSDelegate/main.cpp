@@ -1,5 +1,4 @@
-#ifndef MY_TEST_SUITE_RUNNING
-#define MY_TEST_SUITE_RUNNING
+#ifndef GLOBAL_TEST_ENVIRONMENT
 
 #include <Arduino.h>
 #include <gtest/gtest.h>
@@ -18,10 +17,6 @@ void loop()
         ;
 
     delay(1000);
-
-    Serial.println("-----------------------------------Finished all tests!-----------------------------------");
-
-    delay(10000);
 }
 
-#endif // MY_TEST_SUITE_RUNNING
+#endif // GLOBAL_TEST_ENVIRONMENT
