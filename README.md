@@ -1,8 +1,8 @@
 # DatabaseAPI Library
 
-[![Latest](https://img.shields.io/github/v/tag/ronny-antoon/NVSDatabase?color=red&label=last+release)](https://github.com/ronny-antoon/DatabaseAPI/releases)
-[![Latest](https://badges.registry.platformio.org/packages/ronny-antoon/library/NVSDatabase.svg)](https://registry.platformio.org/libraries/ronny-antoon/DatabaseAPI)
-[![UnitTests](https://github.com/ronny-antoon/NVSDatabase/actions/workflows/build-and-test-embeded.yaml/badge.svg)](https://github.com/ronny-antoon/DatabaseAPI/actions/workflows/build-and-test-embeded.yaml)
+[![Latest](https://img.shields.io/github/v/tag/ronny-antoon/DatabaseAPI?color=red&label=last+release)](https://github.com/ronny-antoon/DatabaseAPI/releases)
+[![Latest](https://badges.registry.platformio.org/packages/ronny-antoon/library/DatabaseAPI.svg)](https://registry.platformio.org/libraries/ronny-antoon/DatabaseAPI)
+[![UnitTests](https://github.com/ronny-antoon/DatabaseAPI/actions/workflows/build-and-test-embeded.yaml/badge.svg)](https://github.com/ronny-antoon/DatabaseAPI/actions/workflows/build-and-test-embeded.yaml)
 
 The DatabaseAPI Library is a C++ library that provides an interface and implementation for a simple key-value database. It is designed to work on the ESP32/Arduino platform, making use of the Non-Volatile Storage (NVS) capabilities for data storage.
 
@@ -93,7 +93,7 @@ Detailed documentation and usage examples can be found in the library source cod
 
 ## Example
 
-Here's a simple example of how to use the NVSDatabase library to store and retrieve data from the NVS database:
+Here's a simple example of how to use the DatabaseAPI library to store and retrieve data from the NVS database:
 
 ```cpp
 #include <DatabaseAPI.hpp>
