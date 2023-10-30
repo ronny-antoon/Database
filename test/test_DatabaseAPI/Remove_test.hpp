@@ -1,84 +1,90 @@
-#ifndef RELEASE
-#ifndef REMOVE_PAIR_TEST_H
-#define REMOVE_PAIR_TEST_H
+#ifndef REMOVE_TEST_H
+#define REMOVE_TEST_H
 
 #include <Arduino.h>
 #include <gtest/gtest.h>
-#include "NVSDatabase.hpp"
 
-class RemovePair_test : public ::testing::Test
+#include "DatabaseDelegateInterface.hpp"
+#include "NVSDelegate.hpp"
+#include "DatabaseAPIInterface.hpp"
+#include "DatabaseAPI.hpp"
+#include "DatabaseError.hpp"
+
+class Remove_test : public ::testing::Test
 {
 protected:
-    NVSDatabase *nvsDb;
+    DatabaseDelegateInterface *nvsDelegate;
+    DatabaseAPIInterface *myDatabase;
     void SetUp() override
     {
-        nvsDb = new NVSDatabase("test_namespace");
+        nvsDelegate = new NVSDelegate("test_namespace");
+        myDatabase = new DatabaseAPI(nvsDelegate);
     }
 
     void TearDown() override
     {
-        nvsDb->eraseAll();
-        delete nvsDb;
+        myDatabase->eraseAll();
+        delete nvsDelegate;
+        delete myDatabase;
     }
 };
 
 // Test case: Attempt to remove a pair with an empty or null key.
-TEST_F(RemovePair_test, Empty_Null_Key)
+TEST_F(Remove_test, Empty_Null_Key)
 {
     // Call the method with an empty key
-    DatabaseError_t result = nvsDb->removePair("");
+    DatabaseError_t result = myDatabase->remove("");
 
     // Ensure the result matches the expected error code
-    ASSERT_EQ(result, DATABASE_KEY_EMPTY);
+    ASSERT_EQ(result, DATABASE_KEY_INVALID);
 
     // Call the method with a null key
-    result = nvsDb->removePair(nullptr);
+    result = myDatabase->remove(nullptr);
 
     // Ensure the result matches the expected error code
-    ASSERT_EQ(result, DATABASE_KEY_EMPTY);
+    ASSERT_EQ(result, DATABASE_KEY_INVALID);
 }
 
 // Test case: Attempt to remove a pair with a key that exceeds the maximum allowed size.
-TEST_F(RemovePair_test, Invalid_Size_Key)
+TEST_F(Remove_test, Invalid_Size_Key)
 {
     // Create a key that exceeds the maximum size
     const char *key = "ThisIsAnInvalidKeyThatExceedsTheMaximumSize";
 
     // Call the method with an invalid key
-    DatabaseError_t result = nvsDb->removePair(key);
+    DatabaseError_t result = myDatabase->remove(key);
 
     // Ensure the result matches the expected error code
-    ASSERT_EQ(result, DATABASE_KEY_INVALID_SIZE);
+    ASSERT_EQ(result, DATABASE_KEY_INVALID);
 }
 
 // Test case: Attempt to remove a non-existing key-value pair.
-TEST_F(RemovePair_test, NonExisting_Key)
+TEST_F(Remove_test, NonExisting_Key)
 {
     // Call the method to remove a non-existing key-value pair
-    DatabaseError_t result = nvsDb->removePair("non_existing_key");
+    DatabaseError_t result = myDatabase->remove("nonExistingKey");
 
     // Ensure the result matches the expected error code
-    ASSERT_EQ(result, DATABASE_NOT_FOUND);
+    ASSERT_EQ(result, DATABASE_KEY_NOT_FOUND);
 }
 
 // Test case: Successfully remove an existing key-value pair.
-TEST_F(RemovePair_test, Existing_Key)
+TEST_F(Remove_test, Existing_Key)
 {
     // Add a key-value pair
-    nvsDb->putPair("existing_key", "existing_value");
+    myDatabase->set("existing_key", "existing_value");
 
     // Call the method to remove an existing key-value pair
-    DatabaseError_t result = nvsDb->removePair("existing_key");
+    DatabaseError_t result = myDatabase->remove("existing_key");
 
     // Ensure the result matches the expected success code
     ASSERT_EQ(result, DATABASE_OK);
 
     // Call the method again to check if the key-value pair was removed
-    result = nvsDb->isExist("existing_key");
+    result = myDatabase->isExist("existing_key");
 
     // Ensure the result matches the expected error code (key not found)
-    ASSERT_EQ(result, DATABASE_NOT_FOUND);
+    ASSERT_EQ(result, DATABASE_KEY_NOT_FOUND);
 }
 
-#endif
 #endif
