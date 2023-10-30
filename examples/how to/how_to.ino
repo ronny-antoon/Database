@@ -1,5 +1,8 @@
 #include <Arduino.h>
-#include <NVSDatabase.hpp>
+
+#include <DatabaseAPI.hpp>
+#include <NVSDelegate.hpp>
+#include <DatabaseError.hpp>
 
 void setup()
 {
@@ -7,18 +10,13 @@ void setup()
     while (!Serial)
         delay(10); // Wait for serial port to connect. Needed for native USB port only
 
-    NVSDatabase *nvsDb = new NVSDatabase("myNamespace");
-    DatabaseError_t result;
+    // Initialize the database
+    DatabaseAPI *myDataBase = new DatabaseAPI(new NVSDelegate("myNamespace"));
+
     const char *myKey = "myKey";
     const char *myValue = "myValue";
-    result = nvsDb->putPair(myKey, myValue);
-    Serial.println(result);
-    size_t maxSize = 32;
-    char retrievedValue[maxSize];
-    result = nvsDb->getValueOf(myKey, retrievedValue, &maxSize);
-    Serial.println(result);
-    Serial.println(retrievedValue);
-    delete nvsDb;
+
+    myDataBase->set(myKey, myValue);
 }
 
 void loop()

@@ -4,4 +4,3 @@ author: Ronny Antoon
 
 steps:
   - wait-serial: '-----------------------------------Finished all tests!-----------------------------------'
-  - wait-serial: '-----------------------------------Finished all tests!-----------------------------------'
