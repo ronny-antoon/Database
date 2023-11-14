@@ -35,6 +35,7 @@ The DatabaseAPI Library is designed to simplify the management of key-value pair
 The DatabaseAPI Library has the following dependencies:
 - C++ Standard Library
 - ESP32/Arduino NVS library (for the NVSDelegate implementation)
+- [MultiPrinterLogger](https://github.com/ronny-antoon/MultiPrinterLogger#readme)
 
 ## Installation
 
@@ -44,7 +45,7 @@ To use the **DatabaseAPI** library in your PlatformIO project, follow these step
 1. Open "platformio.ini", a project configuration file located in the root of PlatformIO project.
 
 2. Add the following line to the `lib_deps` option of `[env:]` section:
-`ronny-antoon/DatabaseAPI@^4.0.0`
+`ronny-antoon/DatabaseAPI@^4.1.0`
 
 3. Build a project, PlatformIO will automatically install dependencies.
 
