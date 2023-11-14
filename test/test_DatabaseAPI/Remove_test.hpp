@@ -15,8 +15,10 @@ class Remove_API_test : public ::testing::Test
 protected:
     DatabaseDelegateInterface *nvsDelegate;
     DatabaseAPIInterface *myDatabase;
+    uint32_t _startFreeHeap = 0;
     void SetUp() override
     {
+        _startFreeHeap = ESP.getFreeHeap();
         nvsDelegate = new NVSDelegate("test_namespace");
         myDatabase = new DatabaseAPI(nvsDelegate);
     }
@@ -26,6 +28,10 @@ protected:
         myDatabase->eraseAll();
         delete nvsDelegate;
         delete myDatabase;
+        nvsDelegate = nullptr;
+        myDatabase = nullptr;
+        if (ESP.getFreeHeap() != _startFreeHeap)
+            FAIL() << "Memory leak of " << _startFreeHeap - ESP.getFreeHeap() << " bytes"; // Fail the test if there is a memory leak
     }
 };
 

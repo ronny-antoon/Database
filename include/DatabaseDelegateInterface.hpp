@@ -7,8 +7,6 @@
  * @author Ronny Antoon
  */
 
-#include <stddef.h> // size_t
-
 #include "DatabaseError.hpp" // DatabaseError_t
 
 /**

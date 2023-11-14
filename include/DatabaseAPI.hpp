@@ -6,10 +6,8 @@
  * @brief This file contains an implementation for the Database API class.
  * @author Ronny Antoon
  */
+#include <MultiPrinterLoggerInterface.hpp>
 
-#include <stddef.h> // size_t
-
-#include "DatabaseError.hpp" // DatabaseError_t
 #include "DatabaseAPIInterface.hpp"
 #include "DatabaseDelegateInterface.hpp"
 
@@ -21,7 +19,7 @@
 class DatabaseAPI : public DatabaseAPIInterface
 {
 public:
-    DatabaseAPI(DatabaseDelegateInterface *delegate);
+    DatabaseAPI(DatabaseDelegateInterface *delegate, MultiPrinterLoggerInterface *logger = nullptr);
 
     /**
      * @brief Destroy the Database API object.
@@ -108,7 +106,8 @@ public:
     DatabaseError_t eraseAll() override;
 
 private:
-    DatabaseDelegateInterface *delegate; // Database delegate.
+    DatabaseDelegateInterface *_delegate; // Database delegate.
+    MultiPrinterLoggerInterface *_logger; // Logger.
 };
 
 #endif // DATABASE_API_H

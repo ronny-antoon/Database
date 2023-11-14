@@ -7,10 +7,8 @@
  * @author Ronny Antoon
  */
 
-#include <stddef.h> // size_t
-#include <nvs.h>    // for nvs handle
+#include <nvs.h> // for nvs handle
 
-#include "DatabaseError.hpp"             // DatabaseError_t
 #include "DatabaseDelegateInterface.hpp" // DatabaseDelegateInterface
 
 #define NVS_DELEGATE_MAX_PARTITION_NAME_LENGTH 16        // Maximum length of a partition name in NVS including the null terminator.

@@ -1,6 +1,4 @@
 #include <string.h> // for strcpy and strlen
-#include <stddef.h> // size_t
-#include <nvs.h>    // for nvs operations
 
 #include "NVSDelegate.hpp"
 

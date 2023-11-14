@@ -1,5 +1,6 @@
 # DatabaseAPI Library
 
+[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/donate/?hosted_button_id=BACPRJTAU4G4E)
 [![Latest](https://img.shields.io/github/v/tag/ronny-antoon/DatabaseAPI?color=red&label=last+release)](https://github.com/ronny-antoon/DatabaseAPI/releases)
 [![Latest](https://badges.registry.platformio.org/packages/ronny-antoon/library/DatabaseAPI.svg)](https://registry.platformio.org/libraries/ronny-antoon/DatabaseAPI)
 [![UnitTests](https://github.com/ronny-antoon/DatabaseAPI/actions/workflows/build-and-test-embeded.yaml/badge.svg)](https://github.com/ronny-antoon/DatabaseAPI/actions/workflows/build-and-test-embeded.yaml)
@@ -43,7 +44,7 @@ To use the **DatabaseAPI** library in your PlatformIO project, follow these step
 1. Open "platformio.ini", a project configuration file located in the root of PlatformIO project.
 
 2. Add the following line to the `lib_deps` option of `[env:]` section:
-`ronny-antoon/DatabaseAPI@^3.2.3`
+`ronny-antoon/DatabaseAPI@^4.0.0`
 
 3. Build a project, PlatformIO will automatically install dependencies.
 
