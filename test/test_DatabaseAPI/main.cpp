@@ -17,6 +17,9 @@ void loop()
         ;
 
     delay(1000);
+    Serial.println("-----------------------------------Finished all tests!-----------------------------------");
+
+    delay(10000);
 }
 
 #endif // GLOBAL_TEST_ENVIRONMENT

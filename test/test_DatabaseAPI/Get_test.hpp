@@ -30,8 +30,9 @@ protected:
         delete myDatabase;
         nvsDelegate = nullptr;
         myDatabase = nullptr;
-        if (ESP.getFreeHeap() != _startFreeHeap)
-            FAIL() << "Memory leak of " << _startFreeHeap - ESP.getFreeHeap() << " bytes"; // Fail the test if there is a memory leak
+        int heapDiff = ESP.getFreeHeap() - _startFreeHeap;
+        if (heapDiff != 0)
+            FAIL() << "Memory leak of " << heapDiff << " bytes"; // Fail the test if there is a memory leak
     }
 };
 

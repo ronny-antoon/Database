@@ -1,0 +1,61 @@
+name: Unit Test
+
+on:
+  workflow_dispatch:
+  push:
+
+jobs:
+  job1:
+    name: Test Database API
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/pip
+            ~/.platformio/.cache
+          key: ${{ runner.os }}-pio
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.9"
+      - name: Install PlatformIO Core
+        run: pip install --upgrade platformio
+      - name: Clear Previous Build
+        run: pio run -t clean -e embeded_env
+      - name: Build PlatformIO Project
+        run: pio test -e embeded_env -f test_DatabaseAPI --without-uploading --without-testing
+      - name: Test Embeded
+        uses: wokwi/wokwi-ci-action@v1
+        with:
+          token: ${{ secrets.WOKWI_CLI_TOKEN }}
+          timeout: 180000
+          fail_text: FAILED
+          scenario: "senario.test.yaml"
+  job2:
+    name: Test NVS Delegate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/pip
+            ~/.platformio/.cache
+          key: ${{ runner.os }}-pio
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.9"
+      - name: Install PlatformIO Core
+        run: pip install --upgrade platformio
+      - name: Clear Previous Build
+        run: pio run -t clean -e embeded_env
+      - name: Build PlatformIO Project
+        run: pio test -e embeded_env -f test_NVSDelegate --without-uploading --without-testing
+      - name: Test Embeded
+        uses: wokwi/wokwi-ci-action@v1
+        with:
+          token: ${{ secrets.WOKWI_CLI_TOKEN }}
+          timeout: 180000
+          fail_text: FAILED
+          scenario: "senario.test.yaml"

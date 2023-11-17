@@ -2,6 +2,7 @@
 #define GET_TEST_H
 
 #include <gtest/gtest.h>
+#include <Arduino.h>
 
 #include "NVSDelegate.hpp"
 
@@ -21,8 +22,9 @@ protected:
         nvsDelegate->eraseAll();
         delete nvsDelegate;
         nvsDelegate = nullptr;
-        if (ESP.getFreeHeap() != _startFreeHeap)
-            FAIL() << "Memory leak of " << _startFreeHeap - ESP.getFreeHeap() << " bytes"; // Fail the test if there is a memory leak
+        int heapDiff = ESP.getFreeHeap() - _startFreeHeap;
+        if (heapDiff != 0)
+            FAIL() << "Memory leak of " << heapDiff << " bytes"; // Fail the test if there is a memory leak
     }
 };
 
