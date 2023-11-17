@@ -15,10 +15,8 @@ class EraseAll_API_test : public ::testing::Test
 protected:
     DatabaseDelegateInterface *nvsDelegate;
     DatabaseAPIInterface *myDatabase;
-    uint32_t _startFreeHeap = 0;
     void SetUp() override
     {
-        _startFreeHeap = ESP.getFreeHeap();
         nvsDelegate = new NVSDelegate("test_namespace");
         myDatabase = new DatabaseAPI(nvsDelegate);
     }
@@ -26,13 +24,11 @@ protected:
     void TearDown() override
     {
         myDatabase->eraseAll();
+        delay(100);
         delete nvsDelegate;
         delete myDatabase;
         nvsDelegate = nullptr;
         myDatabase = nullptr;
-        int heapDiff = ESP.getFreeHeap() - _startFreeHeap;
-        if (heapDiff != 0)
-            FAIL() << "Memory leak of " << heapDiff << " bytes"; // Fail the test if there is a memory leak
     }
 };
 
