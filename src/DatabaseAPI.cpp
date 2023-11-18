@@ -136,3 +136,52 @@ DatabaseError_t DatabaseAPI::eraseAll()
     // Erase all key-value pairs.
     return _delegate->eraseAll();
 }
+
+char *DatabaseAPI::errorToString(DatabaseError_t error, char *errorString, size_t *maxLength)
+{
+    // Check if the error string and maximum length is valid.
+    if (errorString == nullptr || maxLength == nullptr)
+    {
+        return nullptr;
+    }
+
+    // Check if the error is valid.
+    if (error < DATABASE_OK || error > DATABASE_ERROR)
+    {
+        return nullptr;
+    }
+
+    if (*maxLength < 50)
+    {
+        return nullptr;
+    }
+    // Get the error string.
+    switch (error)
+    {
+    case DATABASE_OK:
+        char errorStringTemp[] = "No Error.";
+        strncpy(errorString, errorStringTemp, strlen(errorStringTemp));
+        break;
+    case DATABASE_KEY_INVALID:
+        char errorStringTemp[] = "The key is invalid.";
+        strncpy(errorString, errorStringTemp, strlen(errorStringTemp));
+        break;
+    case DATABASE_VALUE_INVALID:
+        char errorStringTemp[] = "The value is invalid.";
+        strncpy(errorString, errorStringTemp, strlen(errorStringTemp));
+        break;
+    case DATABASE_KEY_NOT_FOUND:
+        char errorStringTemp[] = "The key was not found.";
+        strncpy(errorString, errorStringTemp, strlen(errorStringTemp));
+        break;
+    case DATABASE_ERROR:
+        char errorStringTemp[] = "Database error.";
+        strncpy(errorString, errorStringTemp, strlen(errorStringTemp));
+        break;
+    default:
+        return nullptr;
+        break;
+    }
+
+    return errorString;
+}

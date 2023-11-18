@@ -105,6 +105,8 @@ public:
      */
     DatabaseError_t eraseAll() override;
 
+    char *errorToString(DatabaseError_t error, char *errorString, size_t *maxLength) override;
+
 private:
     DatabaseDelegateInterface *_delegate; // Database delegate.
     MultiPrinterLoggerInterface *_logger; // Logger.

@@ -1,6 +1,6 @@
 {
     "name": "DatabaseAPI",
-    "version": "4.1.0",
+    "version": "4.2.0",
     "description": "The \"DatabaseAPI\" Library is a C++ library that provides an interface and implementation for a simple key-value database",
     "keywords": "NVS Database, ESP32 Storage, ESP8266 NVS, Non-volatile Storage, NVS API, Key-Value Storage, ESP-IDF NVS, NVS Library, ronny, antoon, MetaHouse, Database",
     "repository": {

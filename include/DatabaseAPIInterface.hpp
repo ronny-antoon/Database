@@ -5,7 +5,10 @@
  * @file DatabaseAPIInterface.hpp
  * @brief This file contains an Interface for the Database API class.
  * @author Ronny Antoon
+ * @todo Add Method error to string.
  */
+
+#include <stddef.h> // size_t
 
 #include "DatabaseError.hpp" // DatabaseError_t
 
@@ -100,6 +103,17 @@ public:
      * - DATABASE_ERROR else.
      */
     virtual DatabaseError_t eraseAll() = 0;
+
+    /**
+     * @brief Convert the given error code to a string.
+     *
+     * @param error - Error code to convert.
+     * @param errorString - String to return.
+     * @param maxLength - Maximum size of the string.
+     *
+     * @return char* - Pointer to the string.
+     */
+    virtual char *errorToString(DatabaseError_t error, char *errorString, size_t *maxLength) = 0;
 };
 
 #endif // DATABASE_API_INTERFACE_H
