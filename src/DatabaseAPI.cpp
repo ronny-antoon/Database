@@ -159,24 +159,19 @@ char *DatabaseAPI::errorToString(DatabaseError_t error, char *errorString, size_
     switch (error)
     {
     case DATABASE_OK:
-        char errorStringTemp[] = "No Error.";
-        strncpy(errorString, errorStringTemp, strlen(errorStringTemp));
+        strncpy(errorString, "No Error.", strlen("No Error."));
         break;
     case DATABASE_KEY_INVALID:
-        char errorStringTemp[] = "The key is invalid.";
-        strncpy(errorString, errorStringTemp, strlen(errorStringTemp));
+        strncpy(errorString, "The key is invalid.", strlen("The key is invalid."));
         break;
     case DATABASE_VALUE_INVALID:
-        char errorStringTemp[] = "The value is invalid.";
-        strncpy(errorString, errorStringTemp, strlen(errorStringTemp));
+        strncpy(errorString, "The value is invalid.", strlen("The value is invalid."));
         break;
     case DATABASE_KEY_NOT_FOUND:
-        char errorStringTemp[] = "The key was not found.";
-        strncpy(errorString, errorStringTemp, strlen(errorStringTemp));
+        strncpy(errorString, "The key was not found.", strlen("The key was not found."));
         break;
     case DATABASE_ERROR:
-        char errorStringTemp[] = "Database error.";
-        strncpy(errorString, errorStringTemp, strlen(errorStringTemp));
+        strncpy(errorString, "Database error.", strlen("Database error."));
         break;
     default:
         return nullptr;
