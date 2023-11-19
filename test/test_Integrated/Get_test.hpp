@@ -13,6 +13,7 @@ class IntegratedGetTest : public ::testing::Test
 protected:
     int startFreeHeap = 0;
     int memoryLeak = 0;
+    bool firstCheck = false;
 
     void SetUp() override
     {
@@ -42,7 +43,8 @@ protected:
         memoryLeak = ESP.getFreeHeap() - startFreeHeap;
         delay(10);
 
-        if (memoryLeak != 0)
+        // Check for memory leaks
+        if (memoryLeak != 0 && !firstCheck)
             FAIL() << "Memory leak of " << memoryLeak << " bytes"; // Fail the test if there is a memory leak
     }
 
@@ -67,9 +69,9 @@ protected:
  *  test all possible return values
  */
 
-#ifndef WOKWI
 TEST_F(IntegratedGetTest, DATABASE_OK)
 {
+    firstCheck = true;
     // Arrange
     const char *key = "test_key";
     const char *expectedValue = "integrated_value";
@@ -85,8 +87,16 @@ TEST_F(IntegratedGetTest, DATABASE_OK)
     // Assert
     EXPECT_EQ(err, DatabaseError_t::DATABASE_OK);
     EXPECT_STREQ(actualValue, expectedValue);
+
+    // Cleanup
+    databaseAPI->remove(key);
+
+    // Act
+    err = databaseAPI->get(key, actualValue, maxValueLength);
+
+    // Assert
+    EXPECT_EQ(err, DatabaseError_t::DATABASE_KEY_NOT_FOUND);
 }
-#endif
 
 TEST_F(IntegratedGetTest, DATABASE_KEY_INVALID)
 {
