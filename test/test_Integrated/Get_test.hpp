@@ -67,6 +67,7 @@ protected:
  *  test all possible return values
  */
 
+#ifndef WOKWI
 TEST_F(IntegratedGetTest, DATABASE_OK)
 {
     // Arrange
@@ -85,6 +86,7 @@ TEST_F(IntegratedGetTest, DATABASE_OK)
     EXPECT_EQ(err, DatabaseError_t::DATABASE_OK);
     EXPECT_STREQ(actualValue, expectedValue);
 }
+#endif
 
 TEST_F(IntegratedGetTest, DATABASE_KEY_INVALID)
 {

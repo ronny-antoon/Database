@@ -3,7 +3,8 @@
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/donate/?hosted_button_id=BACPRJTAU4G4E)
 [![Latest](https://img.shields.io/github/v/tag/ronny-antoon/DatabaseAPI?color=red&label=last+release)](https://github.com/ronny-antoon/DatabaseAPI/releases)
 [![Latest](https://badges.registry.platformio.org/packages/ronny-antoon/library/DatabaseAPI.svg)](https://registry.platformio.org/libraries/ronny-antoon/DatabaseAPI)
-[![UnitTests](https://github.com/ronny-antoon/DatabaseAPI/actions/workflows/build-and-test-embeded.yaml/badge.svg)](https://github.com/ronny-antoon/DatabaseAPI/actions/workflows/build-and-test-embeded.yaml)
+[![Integrated Test](https://github.com/ronny-antoon/DatabaseAPI/actions/workflows/Integrated-Test.yaml/badge.svg)](https://github.com/ronny-antoon/DatabaseAPI/actions/workflows/Integrated-Test.yaml)
+[![Unit Test](https://github.com/ronny-antoon/DatabaseAPI/actions/workflows/Unit-Test.yaml/badge.svg)](https://github.com/ronny-antoon/DatabaseAPI/actions/workflows/Unit-Test.yaml)
 
 The DatabaseAPI Library is a C++ library that provides an interface and implementation for a simple key-value database. It is designed to work on the ESP32/Arduino platform, making use of the Non-Volatile Storage (NVS) capabilities for data storage.
 

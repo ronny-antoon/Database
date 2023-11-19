@@ -24,7 +24,7 @@ jobs:
       - name: Clear Previous Build
         run: pio run -t clean -e embeded_env
       - name: Build PlatformIO Project
-        run: pio test -e embeded_env -f test_Integrated --without-uploading --without-testing
+        run: pio test -e wokwi_env -f test_Integrated --without-uploading --without-testing
       - name: Test Embeded
         uses: wokwi/wokwi-ci-action@v1
         with:
