@@ -1,0 +1,6 @@
+#include "Get_test.hpp"
+#include "Set_test.hpp"
+#include "Remove_test.hpp"
+#include "IsExist_test.hpp"
+#include "GetValueLength_test.hpp"
+#include "EraseAll_test.hpp"

@@ -1,7 +1,0 @@
-#include "Constructor_test.hpp"
-#include "Insert_test.hpp"
-#include "Update_test.hpp"
-#include "Remove_test.hpp"
-#include "Get_test.hpp"
-#include "GetLength_test.hpp"
-#include "EreaseAll_test.hpp"

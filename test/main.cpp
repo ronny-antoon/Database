@@ -1,7 +1,9 @@
+#ifndef GOOGLE_UNIT_TEST
 #include <Arduino.h>
 #include <gtest/gtest.h>
 
-#include "IncludeAll_test.hpp"
+#include "test_Unit/includeAll.hpp"
+// #include "test_Integration/includeAll.hpp"
 
 void setup()
 {
@@ -20,3 +22,4 @@ void loop()
 
     delay(10000);
 }
+#endif // GOOGLE_UNIT_TEST

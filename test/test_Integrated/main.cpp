@@ -1,7 +1,8 @@
+#ifdef GOOGLE_UNIT_TEST
 #include <Arduino.h>
 #include <gtest/gtest.h>
 
-#include "IncludeAll_test.hpp"
+#include "includeAll.hpp"
 
 void setup()
 {
@@ -15,7 +16,9 @@ void loop()
         ;
 
     delay(1000);
+
     Serial.println("-----------------------------------Finished all tests!-----------------------------------");
 
     delay(10000);
 }
+#endif // GOOGLE_UNIT_TEST

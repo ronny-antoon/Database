@@ -1,182 +1,224 @@
-#include <string.h> // for strcpy and strlen
+#include <string.h>
 
 #include "DatabaseAPI.hpp"
+#include "NVSDelegateInterface.hpp"
 
-DatabaseAPI::DatabaseAPI(DatabaseDelegateInterface *delegate, MultiPrinterLoggerInterface *logger) : _delegate(delegate), _logger(logger)
+DatabaseAPI::DatabaseAPI(NVSDelegateInterface *nvsDelegate, const char *nvsNamespace) : _nvsDelegate(nvsDelegate)
 {
+    if (nvsNamespace == nullptr || strlen(nvsNamespace) >= NVS_DELEGATE_MAX_NAMESPACE_LENGTH || strlen(nvsNamespace) == 0)
+        strcpy(_nvsNamespace, "DEFAULT_NVS");
+    else
+        strcpy(_nvsNamespace, nvsNamespace);
 }
 
-DatabaseError_t DatabaseAPI::get(const char *key, char *value, size_t *maxLength)
+DatabaseError_t DatabaseAPI::get(const char *key, char *value, size_t maxValueLength)
 {
-    // Check if the delegate is valid.
-    if (_delegate == nullptr)
+    if (_nvsDelegate == nullptr)
+        return DatabaseError_t::DATABASE_ERROR;
+
+    if (key == nullptr || strlen(key) >= NVS_DELEGATE_MAX_KEY_LENGTH || strlen(key) == 0)
+        return DatabaseError_t::DATABASE_KEY_INVALID;
+    if (value == nullptr || maxValueLength == 0)
+        return DatabaseError_t::DATABASE_VALUE_INVALID;
+
+    NVSDelegateHandle_t handle;
+    NVSDelegateError_t err = _nvsDelegate->open(_nvsNamespace, NVSDelegateOpenMode_t::NVSDelegate_READONLY, &handle);
+    if (err != NVSDelegateError_t::NVS_DELEGATE_OK)
     {
-        Log_Error(_logger, "Delegate is nullptr.");
-        return DATABASE_ERROR;
-    }
-    // Check if the key is valid.
-    if (key == nullptr)
-    {
-        Log_Error(_logger, "Key is nullptr.");
-        return DATABASE_KEY_INVALID;
+        if (err == NVSDelegateError_t::NVS_DELEGATE_KEY_NOT_FOUND)
+            return DatabaseError_t::DATABASE_KEY_NOT_FOUND;
+        else
+            return DatabaseError_t::DATABASE_ERROR;
     }
 
-    // Check if the value and maximum length is valid.
-    if (value == nullptr || maxLength == nullptr)
+    err = _nvsDelegate->get_str(handle, key, nullptr, &maxValueLength);
+
+    if (err == NVSDelegateError_t::NVS_DELEGATE_KEY_NOT_FOUND)
     {
-        Log_Error(_logger, "Value or maxLength is nullptr.");
-        return DATABASE_VALUE_INVALID;
+        _nvsDelegate->close(handle);
+        return DatabaseError_t::DATABASE_KEY_NOT_FOUND;
     }
 
-    // Get the value.
-    return _delegate->get(key, value, maxLength);
+    if (err == NVSDelegateError_t::NVS_DELEGATE_UNKOWN_ERROR)
+    {
+        _nvsDelegate->close(handle);
+        return DatabaseError_t::DATABASE_ERROR;
+    }
+
+    err = _nvsDelegate->get_str(handle, key, value, &maxValueLength);
+
+    _nvsDelegate->close(handle);
+
+    if (err != NVSDelegateError_t::NVS_DELEGATE_OK)
+        return DatabaseError_t::DATABASE_ERROR;
+
+    return DatabaseError_t::DATABASE_OK;
 }
 
 DatabaseError_t DatabaseAPI::set(const char *key, const char *value)
 {
-    // Check if the _delegate is valid.
-    if (_delegate == nullptr)
-    {
-        Log_Error(_logger, "Delegate is nullptr.");
-        return DATABASE_ERROR;
-    }
-    // Check if the key is valid.
-    if (key == nullptr)
-    {
-        Log_Error(_logger, "Key is nullptr.");
-        return DATABASE_KEY_INVALID;
-    }
+    if (_nvsDelegate == nullptr)
+        return DatabaseError_t::DATABASE_ERROR;
 
-    // Check if the value is valid.
-    if (value == nullptr)
-    {
-        Log_Error(_logger, "Value is nullptr.");
-        return DATABASE_VALUE_INVALID;
-    }
+    if (key == nullptr || strlen(key) >= NVS_DELEGATE_MAX_KEY_LENGTH || strlen(key) == 0)
+        return DatabaseError_t::DATABASE_KEY_INVALID;
+    if (value == nullptr || strlen(value) >= NVS_DELEGATE_MAX_VALUE_LENGTH || strlen(value) == 0)
+        return DatabaseError_t::DATABASE_VALUE_INVALID;
 
-    // Set the value.
-    return _delegate->insert(key, value);
+    NVSDelegateHandle_t handle;
+    NVSDelegateError_t err = _nvsDelegate->open(_nvsNamespace, NVSDelegateOpenMode_t::NVSDelegate_READWRITE, &handle);
+    if (err != NVSDelegateError_t::NVS_DELEGATE_OK)
+        return DatabaseError_t::DATABASE_ERROR;
+
+    err = _nvsDelegate->set_str(handle, key, value);
+
+    _nvsDelegate->close(handle);
+
+    if (err != NVSDelegateError_t::NVS_DELEGATE_OK)
+        return DatabaseError_t::DATABASE_ERROR;
+
+    return DatabaseError_t::DATABASE_OK;
 }
 
 DatabaseError_t DatabaseAPI::remove(const char *key)
 {
-    // Check if the _delegate is valid.
-    if (_delegate == nullptr)
+    if (_nvsDelegate == nullptr)
+        return DatabaseError_t::DATABASE_ERROR;
+
+    if (key == nullptr || strlen(key) >= NVS_DELEGATE_MAX_KEY_LENGTH || strlen(key) == 0)
+        return DatabaseError_t::DATABASE_KEY_INVALID;
+
+    NVSDelegateHandle_t handle;
+    NVSDelegateError_t err = _nvsDelegate->open(_nvsNamespace, NVSDelegateOpenMode_t::NVSDelegate_READWRITE, &handle);
+    if (err != NVSDelegateError_t::NVS_DELEGATE_OK)
     {
-        Log_Error(_logger, "Delegate is nullptr.");
-        return DATABASE_ERROR;
-    }
-    // Check if the key is valid.
-    if (key == nullptr)
-    {
-        Log_Error(_logger, "Key is nullptr.");
-        return DATABASE_KEY_INVALID;
+        if (err == NVSDelegateError_t::NVS_DELEGATE_KEY_NOT_FOUND)
+            return DatabaseError_t::DATABASE_KEY_NOT_FOUND;
+        else
+            return DatabaseError_t::DATABASE_ERROR;
     }
 
-    // Remove the key.
-    return _delegate->remove(key);
+    err = _nvsDelegate->erase_key(handle, key);
+
+    _nvsDelegate->close(handle);
+
+    if (err == NVSDelegateError_t::NVS_DELEGATE_KEY_NOT_FOUND)
+        return DatabaseError_t::DATABASE_KEY_NOT_FOUND;
+
+    if (err != NVSDelegateError_t::NVS_DELEGATE_OK)
+        return DatabaseError_t::DATABASE_ERROR;
+
+    return DatabaseError_t::DATABASE_OK;
 }
 
 DatabaseError_t DatabaseAPI::isExist(const char *key)
 {
-    // Check if the _delegate is valid.
-    if (_delegate == nullptr)
+    if (_nvsDelegate == nullptr)
+        return DatabaseError_t::DATABASE_ERROR;
+
+    if (key == nullptr || strlen(key) >= NVS_DELEGATE_MAX_KEY_LENGTH || strlen(key) == 0)
+        return DatabaseError_t::DATABASE_KEY_INVALID;
+
+    NVSDelegateHandle_t handle;
+    NVSDelegateError_t err = _nvsDelegate->open(_nvsNamespace, NVSDelegateOpenMode_t::NVSDelegate_READONLY, &handle);
+    if (err != NVSDelegateError_t::NVS_DELEGATE_OK)
     {
-        Log_Error(_logger, "Delegate is nullptr.");
-        return DATABASE_ERROR;
-    }
-    // Check if the key is valid.
-    if (key == nullptr)
-    {
-        Log_Error(_logger, "Key is nullptr.");
-        return DATABASE_KEY_INVALID;
+        if (err == NVSDelegateError_t::NVS_DELEGATE_KEY_NOT_FOUND)
+            return DatabaseError_t::DATABASE_KEY_NOT_FOUND;
+        else
+            return DatabaseError_t::DATABASE_ERROR;
     }
 
-    size_t maxLength = 0;
-    // Check if the key exists.
-    DatabaseError_t err = _delegate->getLength(key, &maxLength);
-    return err;
+    size_t length = 0;
+
+    err = _nvsDelegate->get_str(handle, key, nullptr, &length);
+
+    _nvsDelegate->close(handle);
+
+    if (err == NVSDelegateError_t::NVS_DELEGATE_KEY_NOT_FOUND)
+        return DatabaseError_t::DATABASE_KEY_NOT_FOUND;
+
+    if (err != NVSDelegateError_t::NVS_DELEGATE_OK)
+        return DatabaseError_t::DATABASE_ERROR;
+
+    if (length == 0)
+        return DatabaseError_t::DATABASE_KEY_NOT_FOUND;
+
+    return DatabaseError_t::DATABASE_OK;
 }
 
-DatabaseError_t DatabaseAPI::getLength(const char *key, size_t *requiredLength)
+DatabaseError_t DatabaseAPI::getValueLength(const char *key, size_t *length)
 {
-    // Check if the _delegate is valid.
-    if (_delegate == nullptr)
-    {
-        Log_Error(_logger, "Delegate is nullptr.");
-        return DATABASE_ERROR;
-    }
-    // Check if the key is valid.
-    if (key == nullptr)
-    {
-        Log_Error(_logger, "Key is nullptr.");
-        return DATABASE_KEY_INVALID;
-    }
+    if (_nvsDelegate == nullptr)
+        return DatabaseError_t::DATABASE_ERROR;
 
-    // Check if the required length is valid.
-    if (requiredLength == nullptr)
-    {
-        Log_Error(_logger, "Required length is nullptr.");
-        return DATABASE_VALUE_INVALID;
-    }
+    if (key == nullptr || strlen(key) >= NVS_DELEGATE_MAX_KEY_LENGTH || strlen(key) == 0)
+        return DatabaseError_t::DATABASE_KEY_INVALID;
+    if (length == nullptr)
+        return DatabaseError_t::DATABASE_ERROR;
 
-    // Get the length.
-    return _delegate->getLength(key, requiredLength);
+    NVSDelegateHandle_t handle;
+    NVSDelegateError_t err = _nvsDelegate->open(_nvsNamespace, NVSDelegateOpenMode_t::NVSDelegate_READONLY, &handle);
+    if (err != NVSDelegateError_t::NVS_DELEGATE_OK)
+        return DatabaseError_t::DATABASE_ERROR;
+
+    err = _nvsDelegate->get_str(handle, key, nullptr, length);
+
+    _nvsDelegate->close(handle);
+
+    if (err == NVSDelegateError_t::NVS_DELEGATE_KEY_NOT_FOUND)
+        return DatabaseError_t::DATABASE_KEY_NOT_FOUND;
+
+    if (err != NVSDelegateError_t::NVS_DELEGATE_OK)
+        return DatabaseError_t::DATABASE_ERROR;
+
+    return DatabaseError_t::DATABASE_OK;
 }
 
 DatabaseError_t DatabaseAPI::eraseAll()
 {
-    // Check if the _delegate is valid.
-    if (_delegate == nullptr)
-    {
-        Log_Error(_logger, "Delegate is nullptr.");
-        return DATABASE_ERROR;
-    }
+    if (_nvsDelegate == nullptr)
+        return DatabaseError_t::DATABASE_ERROR;
 
-    // Erase all key-value pairs.
-    return _delegate->eraseAll();
+    NVSDelegateHandle_t handle;
+    NVSDelegateError_t err = _nvsDelegate->open(_nvsNamespace, NVSDelegateOpenMode_t::NVSDelegate_READWRITE, &handle);
+    if (err != NVSDelegateError_t::NVS_DELEGATE_OK)
+        return DatabaseError_t::DATABASE_ERROR;
+
+    err = _nvsDelegate->erase_all(handle);
+
+    _nvsDelegate->close(handle);
+
+    if (err != NVSDelegateError_t::NVS_DELEGATE_OK)
+        return DatabaseError_t::DATABASE_ERROR;
+
+    return DatabaseError_t::DATABASE_OK;
 }
 
-char *DatabaseAPI::errorToString(DatabaseError_t error, char *errorString, size_t *maxLength)
+void DatabaseAPI::errorToString(DatabaseError_t error, char *errorString, uint8_t maxLength)
 {
-    // Check if the error string and maximum length is valid.
-    if (errorString == nullptr || maxLength == nullptr)
-    {
-        return nullptr;
-    }
+    if (errorString == nullptr || maxLength < 50)
+        return;
 
-    // Check if the error is valid.
-    if (error < DATABASE_OK || error > DATABASE_ERROR)
-    {
-        return nullptr;
-    }
-
-    if (*maxLength < 50)
-    {
-        return nullptr;
-    }
-    // Get the error string.
     switch (error)
     {
-    case DATABASE_OK:
-        strncpy(errorString, "No Error.", strlen("No Error."));
+    case DatabaseError_t::DATABASE_OK:
+        strncpy(errorString, "No Error.", maxLength);
         break;
-    case DATABASE_KEY_INVALID:
-        strncpy(errorString, "The key is invalid.", strlen("The key is invalid."));
+    case DatabaseError_t::DATABASE_ERROR:
+        strncpy(errorString, "Internal Error.", maxLength);
         break;
-    case DATABASE_VALUE_INVALID:
-        strncpy(errorString, "The value is invalid.", strlen("The value is invalid."));
+    case DatabaseError_t::DATABASE_KEY_INVALID:
+        strncpy(errorString, "Key is invalid.", maxLength);
         break;
-    case DATABASE_KEY_NOT_FOUND:
-        strncpy(errorString, "The key was not found.", strlen("The key was not found."));
+    case DatabaseError_t::DATABASE_VALUE_INVALID:
+        strncpy(errorString, "Value is invalid.", maxLength);
         break;
-    case DATABASE_ERROR:
-        strncpy(errorString, "Database error.", strlen("Database error."));
+    case DatabaseError_t::DATABASE_KEY_NOT_FOUND:
+        strncpy(errorString, "Key not found.", maxLength);
         break;
     default:
-        return nullptr;
+        strncpy(errorString, "Unknown Error.", maxLength);
         break;
     }
-
-    return errorString;
 }

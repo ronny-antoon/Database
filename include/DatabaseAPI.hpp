@@ -1,49 +1,43 @@
 #ifndef DATABASE_API_H
 #define DATABASE_API_H
 
-/**
- * @file DatabaseAPI.hpp
- * @brief This file contains an implementation for the Database API class.
- * @author Ronny Antoon
- */
-#include <MultiPrinterLoggerInterface.hpp>
-
 #include "DatabaseAPIInterface.hpp"
-#include "DatabaseDelegateInterface.hpp"
+#include "NVSDelegateInterface.hpp"
 
-/**
- * @brief DatabaseAPI - Implementation for the Database API class.
- *
- * The DatabaseAPI class provides an implementation for the Database API class.
- */
 class DatabaseAPI : public DatabaseAPIInterface
 {
 public:
-    DatabaseAPI(DatabaseDelegateInterface *delegate, MultiPrinterLoggerInterface *logger = nullptr);
+    /**
+     * @brief Construct a new Database API object
+     *
+     * @param nvsDelegate - NVS delegate to use.
+     * @param nvsNamespace - Namespace for the NVS. The string should include the null terminator.
+     */
+    DatabaseAPI(NVSDelegateInterface *nvsDelegate, const char *nvsNamespace);
 
     /**
-     * @brief Destroy the Database API object.
+     * @brief Destroy the Database API Interface object.
      */
-    ~DatabaseAPI() override = default;
+    ~DatabaseAPI() = default;
 
     /**
      * @brief Get the value associated with the given key.
      *
      * @param key - Key to search for, include the null terminator.
      * @param value - Value to return, include the null terminator.
-     * @param maxLength - Maximum size of the value.
+     * @param maxValueLength - Maximum size of the value.
      *
      * @return DatabaseError_t - Error code indicating the result of the operation. Possible values:
      * - DATABASE_OK if the key-value pair was successfully found.
      * - DATABASE_KEY_INVALID if the key is invalid.
      * - DATABASE_VALUE_INVALID if the value is invalid.
      * - DATABASE_KEY_NOT_FOUND if the key was not found.
-     * - DATABASE_ERROR else.
+     * - DATABASE_ERROR for internal error.
      */
-    DatabaseError_t get(const char *key, char *value, size_t *maxLength) override;
+    DatabaseError_t get(const char *key, char *value, size_t maxValueLength) override;
 
     /**
-     * @brief Set the value associated with the given key.
+     * @brief Set the value associated with the given key or update value if key Exist.
      *
      * @param key - Key to set, include the null terminator.
      * @param value - Value to set, include the null terminator.
@@ -52,7 +46,7 @@ public:
      * - DATABASE_OK if the key-value pair was successfully set.
      * - DATABASE_KEY_INVALID if the key is invalid.
      * - DATABASE_VALUE_INVALID if the value is invalid.
-     * - DATABASE_ERROR else.
+     * - DATABASE_ERROR for internal error.
      */
     DatabaseError_t set(const char *key, const char *value) override;
 
@@ -65,7 +59,7 @@ public:
      * - DATABASE_OK if the key-value pair was successfully removed.
      * - DATABASE_KEY_INVALID if the key is invalid.
      * - DATABASE_KEY_NOT_FOUND if the key was not found.
-     * - DATABASE_ERROR else.
+     * - DATABASE_ERROR for internal error.
      */
     DatabaseError_t remove(const char *key) override;
 
@@ -78,7 +72,7 @@ public:
      * - DATABASE_OK if the key-value pair was successfully found.
      * - DATABASE_KEY_INVALID if the key is invalid.
      * - DATABASE_KEY_NOT_FOUND if the key was not found.
-     * - DATABASE_ERROR else.
+     * - DATABASE_ERROR for internal error.
      */
     DatabaseError_t isExist(const char *key) override;
 
@@ -94,7 +88,7 @@ public:
      * - DATABASE_KEY_NOT_FOUND if the key was not found.
      * - DATABASE_ERROR else.
      */
-    DatabaseError_t getLength(const char *key, size_t *requiredLength) override;
+    DatabaseError_t getValueLength(const char *key, size_t *requiredLength) override;
 
     /**
      * @brief Erase all key-value pairs from the database.
@@ -105,11 +99,19 @@ public:
      */
     DatabaseError_t eraseAll() override;
 
-    char *errorToString(DatabaseError_t error, char *errorString, size_t *maxLength) override;
+    /**
+     * @brief Convert the given error code to a string.
+     *
+     * @param error - Error code to convert.
+     * @param errorString - String to return.
+     * @param maxLength - Maximum size of the string. 255 is the maximum size.
+     *
+     */
+    void errorToString(DatabaseError_t error, char *errorString, uint8_t maxLength) override;
 
 private:
-    DatabaseDelegateInterface *_delegate; // Database delegate.
-    MultiPrinterLoggerInterface *_logger; // Logger.
+    NVSDelegateInterface *_nvsDelegate; ///< NVS delegate to use.
+    char _nvsNamespace[16];             ///< Namespace for the NVS;
 };
 
 #endif // DATABASE_API_H
