@@ -3,115 +3,102 @@
 
 #include "NVSDelegateInterface.hpp"
 
+/**
+ * @brief Implementation of NVSDelegateInterface for handling non-volatile storage operations.
+ */
 class NVSDelegate : public NVSDelegateInterface
 {
 public:
     /**
-     * @brief Construct a new NVSDelegate object
+     * @brief Default constructor for NVSDelegate.
      */
     NVSDelegate() = default;
 
     /**
-     * @brief Destroy the NVSDelegate object
+     * @brief Default destructor for NVSDelegate.
      */
     ~NVSDelegate() = default;
 
     /**
-     * @brief Open a namespace in the NVS.
+     * @brief Opens a namespace in non-volatile storage with the specified name and mode.
      *
-     * @param name Namespace name
-     * @param open_mode Open mode
-     * @param out_handle Handle to the namespace
-     *
-     * @details
-     *
-     * @return NVSDelegateError_t:-
-     *      NVS_DELEGATE_OK: No error.
-     *      NVS_DELEGATE_NAMESPACE_INVALID: Namespace is invalid.
-     *      NVS_DELEGATE_KEY_NOT_FOUND: Namespace does not exist.
-     *      NVS_DELEGATE_NOT_ENOUGH_SPACE: Not enough space.
-     *      NVS_DELEGATE_UNKOWN_ERROR: Internal error.
+     * @param name The name of the namespace to open.
+     * @param open_mode The mode in which to open the namespace (READWRITE or READONLY).
+     * @param out_handle Pointer to receive the handle for the opened namespace.
+     * @return NVSDelegateError_t indicating the success or failure of the operation.
+     *         - NVS_DELEGATE_OK: Operation successful.
+     *         - NVS_DELEGATE_NAMESPACE_INVALID: Invalid namespace name.
+     *         - NVS_DELEGATE_NOT_ENOUGH_SPACE: Not enough space in the storage.
+     *         - NVS_DELEGATE_KEY_NOT_FOUND: Namespace not found.
+     *         - NVS_DELEGATE_UNKOWN_ERROR: Unknown error.
      */
     NVSDelegateError_t open(const char *name, NVSDelegateOpenMode_t open_mode, NVSDelegateHandle_t *out_handle) override;
 
     /**
-     * @brief Close a namespace in the NVS.
+     * @brief Closes the specified non-volatile storage namespace.
      *
-     * @param handle Handle to the namespace
+     * @param handle The handle of the namespace to close.
      */
     void close(NVSDelegateHandle_t handle) override;
 
     /**
-     * @brief Set a string value in the NVS.
+     * @brief Sets a string value for the specified key in the given non-volatile storage namespace.
      *
-     * @param handle Handle to the namespace
-     * @param key Key
-     * @param value Value
-     *
-     * @details
-     *
-     * @return NVSDelegateError_t:-
-     *      NVS_DELEGATE_OK: No error.
-     *      NVS_DELEGATE_KEY_INVALID: Key is invalid.
-     *      NVS_DELEGATE_VALUE_INVALID: Value is invalid.
-     *      NVS_DELEGATE_HANDLE_INVALID: Handle is invalid.
-     *      NVS_DELEGATE_READONLY: Read only.
-     *      NVS_DELEGATE_KEY_NOT_FOUND: Key does not exist.
-     *      NVS_DELEGATE_NOT_ENOUGH_SPACE: Not enough space.
-     *      NVS_DELEGATE_UNKOWN_ERROR: Internal error.
+     * @param handle The handle of the namespace.
+     * @param key The key for the string value.
+     * @param value The string value to set.
+     * @return NVSDelegateError_t indicating the success or failure of the operation.
+     *         - NVS_DELEGATE_OK: Operation successful.
+     *         - NVS_DELEGATE_KEY_INVALID: Invalid key.
+     *         - NVS_DELEGATE_VALUE_INVALID: Invalid value.
+     *         - NVS_DELEGATE_READONLY: Attempt to write in READONLY mode.
+     *         - NVS_DELEGATE_NOT_ENOUGH_SPACE: Not enough space in the storage.
+     *         - NVS_DELEGATE_HANDLE_INVALID: Invalid namespace handle.
+     *         - NVS_DELEGATE_UNKOWN_ERROR: Unknown error.
      */
     NVSDelegateError_t set_str(NVSDelegateHandle_t handle, const char *key, const char *value) override;
 
     /**
-     * @brief Get a string value from the NVS.
+     * @brief Gets the string value for the specified key from the given non-volatile storage namespace.
      *
-     * @param handle Handle to the namespace
-     * @param key Key
-     * @param out_value Value
-     * @param length Length of the value
-     *
-     * @details
-     *
-     * @return NVSDelegateError_t:-
-     *      NVS_DELEGATE_OK: No error.
-     *      NVS_DELEGATE_KEY_INVALID: Key is invalid.
-     *      NVS_DELEGATE_VALUE_INVALID: Value is invalid.
-     *      NVS_DELEGATE_HANDLE_INVALID: Handle is invalid.
-     *      NVS_DELEGATE_KEY_NOT_FOUND: Key does not exist.
-     *      NVS_DELEGATE_UNKOWN_ERROR: Internal error.
+     * @param handle The handle of the namespace.
+     * @param key The key for the string value.
+     * @param out_value Buffer to store the retrieved string value.
+     * @param length Pointer to the length of the buffer; updated with the actual length of the string.
+     * @return NVSDelegateError_t indicating the success or failure of the operation.
+     *         - NVS_DELEGATE_OK: Operation successful.
+     *         - NVS_DELEGATE_KEY_INVALID: Invalid key.
+     *         - NVS_DELEGATE_VALUE_INVALID: Invalid value.
+     *         - NVS_DELEGATE_HANDLE_INVALID: Invalid namespace handle.
+     *         - NVS_DELEGATE_KEY_NOT_FOUND: Key not found.
+     *         - NVS_DELEGATE_UNKOWN_ERROR: Unknown error.
      */
     NVSDelegateError_t get_str(NVSDelegateHandle_t handle, const char *key, char *out_value, size_t *length) override;
 
     /**
-     * @brief Erase a key from the NVS.
+     * @brief Erases the key and its associated value from the specified non-volatile storage namespace.
      *
-     * @param handle Handle to the namespace
-     * @param key Key
-     *
-     * @details
-     *
-     * @return NVSDelegateError_t:-
-     *      NVS_DELEGATE_OK: No error.
-     *      NVS_DELEGATE_KEY_INVALID: Key is invalid.
-     *      NVS_DELEGATE_HANDLE_INVALID: Handle is invalid.
-     *      NVS_DELEGATE_READONLY: Read only.
-     *      NVS_DELEGATE_KEY_NOT_FOUND: Key does not exist.
-     *      NVS_DELEGATE_UNKOWN_ERROR: Internal error.
+     * @param handle The handle of the namespace.
+     * @param key The key to erase.
+     * @return NVSDelegateError_t indicating the success or failure of the operation.
+     *         - NVS_DELEGATE_OK: Operation successful.
+     *         - NVS_DELEGATE_KEY_INVALID: Invalid key.
+     *         - NVS_DELEGATE_HANDLE_INVALID: Invalid namespace handle.
+     *         - NVS_DELEGATE_KEY_NOT_FOUND: Key not found.
+     *         - NVS_DELEGATE_READONLY: Attempt to erase in READONLY mode.
+     *         - NVS_DELEGATE_UNKOWN_ERROR: Unknown error.
      */
     NVSDelegateError_t erase_key(NVSDelegateHandle_t handle, const char *key) override;
 
     /**
-     * @brief Erase all keys from the NVS.
+     * @brief Erases all keys and values from the specified non-volatile storage namespace.
      *
-     * @param handle Handle to the namespace
-     *
-     * @details
-     *
-     * @return NVSDelegateError_t:-
-     *      NVS_DELEGATE_OK: No error.
-     *      NVS_DELEGATE_HANDLE_INVALID: Handle is invalid.
-     *      NVS_DELEGATE_READONLY: Read only.
-     *      NVS_DELEGATE_UNKOWN_ERROR: Internal error.
+     * @param handle The handle of the namespace.
+     * @return NVSDelegateError_t indicating the success or failure of the operation.
+     *         - NVS_DELEGATE_OK: Operation successful.
+     *         - NVS_DELEGATE_HANDLE_INVALID: Invalid namespace handle.
+     *         - NVS_DELEGATE_READONLY: Attempt to erase in READONLY mode.
+     *         - NVS_DELEGATE_UNKOWN_ERROR: Unknown error.
      */
     NVSDelegateError_t erase_all(NVSDelegateHandle_t handle) override;
 };

@@ -1,117 +1,116 @@
 #ifndef DATABASE_API_H
 #define DATABASE_API_H
 
+#include <MultiPrinterLoggerInterface.hpp>
+
 #include "DatabaseAPIInterface.hpp"
 #include "NVSDelegateInterface.hpp"
 
+/**
+ * @brief Implementation of DatabaseAPIInterface for interacting with non-volatile storage using NVSDelegate.
+ */
 class DatabaseAPI : public DatabaseAPIInterface
 {
 public:
     /**
-     * @brief Construct a new Database API object
+     * @brief Constructor for DatabaseAPI.
      *
-     * @param nvsDelegate - NVS delegate to use.
-     * @param nvsNamespace - Namespace for the NVS. The string should include the null terminator.
+     * @param nvsDelegate Pointer to the NVSDelegateInterface instance.
+     * @param nvsNamespace The namespace to use in non-volatile storage.
      */
-    DatabaseAPI(NVSDelegateInterface *nvsDelegate, const char *nvsNamespace);
+    DatabaseAPI(NVSDelegateInterface *nvsDelegate, const char *nvsNamespace, MultiPrinterLoggerInterface *logger = nullptr);
 
     /**
-     * @brief Destroy the Database API Interface object.
+     * @brief Destructor for DatabaseAPI.
      */
-    ~DatabaseAPI() = default;
+    ~DatabaseAPI();
 
     /**
-     * @brief Get the value associated with the given key.
+     * @brief Retrieves the value associated with the specified key from the database.
      *
-     * @param key - Key to search for, include the null terminator.
-     * @param value - Value to return, include the null terminator.
-     * @param maxValueLength - Maximum size of the value.
-     *
-     * @return DatabaseError_t - Error code indicating the result of the operation. Possible values:
-     * - DATABASE_OK if the key-value pair was successfully found.
-     * - DATABASE_KEY_INVALID if the key is invalid.
-     * - DATABASE_VALUE_INVALID if the value is invalid.
-     * - DATABASE_KEY_NOT_FOUND if the key was not found.
-     * - DATABASE_ERROR for internal error.
+     * @param key The key for the value.
+     * @param value Buffer to store the retrieved value.
+     * @param maxValueLength The maximum length of the buffer.
+     * @return DatabaseError_t indicating the success or failure of the operation.
+     *         - DATABASE_OK: Operation successful.
+     *         - DATABASE_KEY_INVALID: Invalid key.
+     *         - DATABASE_VALUE_INVALID: Invalid value buffer.
+     *         - DATABASE_KEY_NOT_FOUND: Key not found.
+     *         - DATABASE_ERROR: General database error.
      */
     DatabaseError_t get(const char *key, char *value, size_t maxValueLength) override;
 
     /**
-     * @brief Set the value associated with the given key or update value if key Exist.
+     * @brief Sets the value for the specified key in the database.
      *
-     * @param key - Key to set, include the null terminator.
-     * @param value - Value to set, include the null terminator.
-     *
-     * @return DatabaseError_t - Error code indicating the result of the operation. Possible values:
-     * - DATABASE_OK if the key-value pair was successfully set.
-     * - DATABASE_KEY_INVALID if the key is invalid.
-     * - DATABASE_VALUE_INVALID if the value is invalid.
-     * - DATABASE_ERROR for internal error.
+     * @param key The key for the value.
+     * @param value The value to set.
+     * @return DatabaseError_t indicating the success or failure of the operation.
+     *         - DATABASE_OK: Operation successful.
+     *         - DATABASE_KEY_INVALID: Invalid key.
+     *         - DATABASE_VALUE_INVALID: Invalid value.
+     *         - DATABASE_ERROR: General database error.
      */
     DatabaseError_t set(const char *key, const char *value) override;
 
     /**
-     * @brief Remove the key-value pair associated with the given key.
+     * @brief Removes the specified key and its associated value from the database.
      *
-     * @param key - Key to remove, include the null terminator.
-     *
-     * @return DatabaseError_t - Error code indicating the result of the operation. Possible values:
-     * - DATABASE_OK if the key-value pair was successfully removed.
-     * - DATABASE_KEY_INVALID if the key is invalid.
-     * - DATABASE_KEY_NOT_FOUND if the key was not found.
-     * - DATABASE_ERROR for internal error.
+     * @param key The key to remove.
+     * @return DatabaseError_t indicating the success or failure of the operation.
+     *         - DATABASE_OK: Operation successful.
+     *         - DATABASE_KEY_INVALID: Invalid key.
+     *         - DATABASE_KEY_NOT_FOUND: Key not found.
+     *         - DATABASE_ERROR: General database error.
      */
     DatabaseError_t remove(const char *key) override;
 
     /**
-     * @brief Check if the given key exists in the database.
+     * @brief Checks if the specified key exists in the database.
      *
-     * @param key - Key to search for, include the null terminator.
-     *
-     * @return DatabaseError_t - Error code indicating the result of the operation. Possible values:
-     * - DATABASE_OK if the key-value pair was successfully found.
-     * - DATABASE_KEY_INVALID if the key is invalid.
-     * - DATABASE_KEY_NOT_FOUND if the key was not found.
-     * - DATABASE_ERROR for internal error.
+     * @param key The key to check for existence.
+     * @return DatabaseError_t indicating the success or failure of the operation.
+     *         - DATABASE_OK: Key exists.
+     *         - DATABASE_KEY_INVALID: Invalid key.
+     *         - DATABASE_KEY_NOT_FOUND: Key not found.
+     *         - DATABASE_ERROR: General database error.
      */
     DatabaseError_t isExist(const char *key) override;
 
     /**
-     * @brief Get the length of the value associated with the given key.
+     * @brief Retrieves the length of the value associated with the specified key.
      *
-     * @param key - Key to search for, include the null terminator.
-     * @param requiredLength - the return Length of the value associated with the given key.
-     *
-     * @return DatabaseError_t - Error code indicating the result of the operation. Possible values:
-     * - DATABASE_OK if the key-value pair was successfully found.
-     * - DATABASE_KEY_INVALID if the key is invalid.
-     * - DATABASE_KEY_NOT_FOUND if the key was not found.
-     * - DATABASE_ERROR else.
+     * @param key The key for the value.
+     * @param requiredLength Pointer to store the required length of the value.
+     * @return DatabaseError_t indicating the success or failure of the operation.
+     *         - DATABASE_OK: Operation successful.
+     *         - DATABASE_KEY_INVALID: Invalid key.
+     *         - DATABASE_ERROR: General database error.
      */
     DatabaseError_t getValueLength(const char *key, size_t *requiredLength) override;
 
     /**
-     * @brief Erase all key-value pairs from the database.
+     * @brief Removes all keys and values from the database.
      *
-     * @return DatabaseError_t - Error code indicating the result of the operation. Possible values:
-     * - DATABASE_OK if the database was successfully erased.
-     * - DATABASE_ERROR else.
+     * @return DatabaseError_t indicating the success or failure of the operation.
+     *         - DATABASE_OK: Operation successful.
+     *         - DATABASE_ERROR: General database error.
      */
     DatabaseError_t eraseAll() override;
 
     /**
-     * @brief Convert the given error code to a string.
+     * @brief Converts a DatabaseError_t value to a human-readable error string.
      *
-     * @param error - Error code to convert.
-     * @param errorString - String to return.
-     * @param maxLength - Maximum size of the string. 255 is the maximum size.
-     *
+     * @param error The DatabaseError_t value to convert.
+     * @param errorString Buffer to store the error string.
+     * @param maxLength The maximum length of the error string buffer.
      */
     void errorToString(DatabaseError_t error, char *errorString, uint8_t maxLength) override;
 
 private:
-    NVSDelegateInterface *_nvsDelegate; ///< NVS delegate to use.
-    char _nvsNamespace[16];             ///< Namespace for the NVS;
+    NVSDelegateInterface *_nvsDelegate;   /**< Pointer to the NVSDelegateInterface instance. */
+    char _nvsNamespace[16];               /**< The namespace to use in non-volatile storage. */
+    MultiPrinterLoggerInterface *_logger; /**< Pointer to the MultiPrinterLoggerInterface instance. */
 };
 
 #endif // DATABASE_API_H

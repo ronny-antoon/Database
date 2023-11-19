@@ -14,7 +14,6 @@ The DatabaseAPI Library is a C++ library that provides an interface and implemen
 - [Dependencies](#dependencies)
 - [Installation](#installation)
 - [Usage](#usage)
-- [API](#API)
 - [Example](#example)
 - [License](#license)
 - [Contributions](#contributions)
@@ -28,8 +27,9 @@ The DatabaseAPI Library is designed to simplify the management of key-value pair
 
 - `Key-Value Storage`: Store and retrieve key-value pairs.
 - `Error Handling`: Comprehensive error handling with error codes.
-- `Database Delegation`: Easily switch between different database implementations.
 - `ESP32/Arduino NVS Support`: Includes an implementation for the ESP32/Arduino NVS database.
+- `Mocking Support`: Facilitates unit testing through the use of mocks for the NVS delegate.
+- `Integrated Testing`: Provides integrated tests using the actual NVS implementation for comprehensive testing.
 
 ## Dependencies
 
@@ -46,7 +46,7 @@ To use the **DatabaseAPI** library in your PlatformIO project, follow these step
 1. Open "platformio.ini", a project configuration file located in the root of PlatformIO project.
 
 2. Add the following line to the `lib_deps` option of `[env:]` section:
-`ronny-antoon/DatabaseAPI@^4.2.1`
+`ronny-antoon/DatabaseAPI@^5.0.0`
 
 3. Build a project, PlatformIO will automatically install dependencies.
 
@@ -61,36 +61,56 @@ To use the **DatabaseAPI** library in your Arduino project, follow these steps:
 
 ## Usage
 
-1. Initialize the database delegate, such as `NVSDelegate` for ESP32/Arduino NVS.
+1. Initialize the database delegate, such as `NVSDelegate` for ESP32/Arduino NVS, and the DatabaseAPI
 ```cpp
-NVSDelegate nvsDelegate("MyPartition");
+#include "DatabaseAPI.hpp"
+#include "NVSDelegate.hpp"
+
+// Create an instance of NVSDelegate (use MockNVSDelegate for unit testing)
+NVSDelegate *nvsDelegate = new NVSDelegate();
+
+// Create an instance of DatabaseAPI
+DatabaseAPI *databaseAPI = new DatabaseAPI(nvsDelegate, "myNamespace");
 ```
 
-2. Create a `DatabaseAPI` instance and pass the delegate to it.
+**Basic Operations**
+
+Set a Value
 ```cpp
-DatabaseAPI database(&nvsDelegate);
+const char *key = "your_key";
+const char *value = "your_value";
+
+DatabaseError_t err = databaseAPI->set(key, value);
 ```
 
-3. Use the API to perform database operations.
+Get a Value
 ```cpp
-char key[] = "my_key";
-char value[] = "my_value";
+const char *key = "your_key";
+char actualValue[NVS_DELEGATE_MAX_VALUE_LENGTH];
+size_t maxValueLength = NVS_DELEGATE_MAX_VALUE_LENGTH;
 
-DatabaseError_t result = database.set(key, value);
-if (result == DATABASE_OK) {
-    // Key-Value pair successfully set.
-} else {
-    // Handle the error.
-}
+DatabaseError_t err = databaseAPI->get(key, actualValue, maxValueLength);
 ```
 
-## API
+Check if a Key Exists
+```cpp
+const char *key = "your_key";
 
-The DatabaseAPI Library provides the following classes and interfaces:
-- `DatabaseDelegateInterface`: Interface for database delegate classes.
-- `NVSDelegate`: Implementation of the DatabaseDelegateInterface for ESP32/Arduino NVS.
-- `DatabaseAPIInterface`: Interface for the Database API class.
-- `DatabaseAPI`: Implementation of the DatabaseAPIInterface for interacting with the database.
+DatabaseError_t err = databaseAPI->isExist(key);
+```
+
+Get the Length of a Value
+```cpp
+const char *key = "your_key";
+size_t valueLength = 0;
+
+DatabaseError_t err = databaseAPI->getValueLength(key, &valueLength);
+```
+
+Erase All Key-Value Pairs
+```cpp
+DatabaseError_t err = databaseAPI->eraseAll();
+```
 
 Detailed documentation and usage examples can be found in the library source code.
 
@@ -104,10 +124,10 @@ Here's a simple example of how to use the DatabaseAPI library to store and retri
 #include <DatabaseError.hpp>
 
 // Initialize the database delegate
-NVSDelegate nvsDelegate("MyPartition");
+NVSDelegate nvsDelegate();
 
 // Initialize the database API class
-DatabaseAPI database(&nvsDelegate);
+DatabaseAPI database(&nvsDelegate, "MyPartition");
 
 // Set a new key-value pair in database.
 DatabaseError_t result = database.set("key", "value");
