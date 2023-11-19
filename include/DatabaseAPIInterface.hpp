@@ -96,7 +96,7 @@ public:
      * @brief Get the length of the value associated with the given key.
      *
      * @param key - Key to search for, include the null terminator.
-     * @param requiredLength - the return Length of the value associated with the given key.
+     * @param requiredLength - the return Length of the value associated with the given key, include the null terminator.
      *
      * @return DatabaseError_t - Error code indicating the result of the operation. Possible values:
      * - DATABASE_OK if the key-value pair was successfully found.

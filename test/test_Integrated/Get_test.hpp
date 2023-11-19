@@ -11,8 +11,16 @@
 class IntegratedGetTest : public ::testing::Test
 {
 protected:
+    int startFreeHeap = 0;
+    int memoryLeak = 0;
+
     void SetUp() override
     {
+        // Get the free heap before each test
+        delay(10);
+        startFreeHeap = ESP.getFreeHeap();
+        delay(10);
+
         // Initialize the database API with the actual NVS implementation
         nvsDelegate = new NVSDelegate();
         databaseAPI = new DatabaseAPI(nvsDelegate, "testNamespace");
@@ -28,6 +36,14 @@ protected:
 
         delete databaseAPI;
         delete nvsDelegate;
+
+        // Calculate the memory leak
+        delay(10);
+        memoryLeak = ESP.getFreeHeap() - startFreeHeap;
+        delay(10);
+
+        if (memoryLeak != 0)
+            FAIL() << "Memory leak of " << memoryLeak << " bytes"; // Fail the test if there is a memory leak
     }
 
     DatabaseAPI *databaseAPI;
