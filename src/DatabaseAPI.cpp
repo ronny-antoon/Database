@@ -272,17 +272,26 @@ void DatabaseAPI::errorToString(DatabaseError_t error, char *errorString, uint8_
     case DatabaseError_t::DATABASE_OK:
         strncpy(errorString, "No Error.", maxLength);
         break;
-    case DatabaseError_t::DATABASE_ERROR:
-        strncpy(errorString, "Internal Error.", maxLength);
-        break;
     case DatabaseError_t::DATABASE_KEY_INVALID:
-        strncpy(errorString, "Key is invalid.", maxLength);
+        strncpy(errorString, "Invalid Key.", maxLength);
         break;
     case DatabaseError_t::DATABASE_VALUE_INVALID:
-        strncpy(errorString, "Value is invalid.", maxLength);
+        strncpy(errorString, "Invalid Value.", maxLength);
         break;
     case DatabaseError_t::DATABASE_KEY_NOT_FOUND:
-        strncpy(errorString, "Key not found.", maxLength);
+        strncpy(errorString, "Key Not Found.", maxLength);
+        break;
+    case DatabaseError_t::DATABASE_KEY_ALREADY_EXISTS:
+        strncpy(errorString, "Key Already Exists.", maxLength);
+        break;
+    case DatabaseError_t::DATABASE_NAMESPACE_INVALID:
+        strncpy(errorString, "Invalid Namespace.", maxLength);
+        break;
+    case DatabaseError_t::DATABASE_NOT_ENOUGH_SPACE:
+        strncpy(errorString, "Not Enough Space.", maxLength);
+        break;
+    case DatabaseError_t::DATABASE_ERROR:
+        strncpy(errorString, "Internal Error.", maxLength);
         break;
     default:
         strncpy(errorString, "Unknown Error.", maxLength);
