@@ -2,9 +2,10 @@
 #define DATABASE_API_H
 
 #include <MultiPrinterLoggerInterface.hpp>
+#include <string.h>
 
-#include "DatabaseAPIInterface.hpp"
 #include "NVSDelegateInterface.hpp"
+#include "DatabaseAPIInterface.hpp"
 
 /**
  * @brief Implementation of DatabaseAPIInterface for interacting with non-volatile storage using NVSDelegate.

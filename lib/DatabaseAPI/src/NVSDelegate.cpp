@@ -1,6 +1,4 @@
 #include "NVSDelegate.hpp"
-#include <nvs.h>
-#include <string.h>
 
 NVSDelegateError_t NVSDelegate::open(const char *name, NVSDelegateOpenMode_t open_mode, NVSDelegateHandle_t *out_handle)
 {

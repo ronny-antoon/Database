@@ -1,6 +1,9 @@
 #ifndef NVS_DELEGATE_H
 #define NVS_DELEGATE_H
 
+#include <nvs.h>
+#include <string.h>
+
 #include "NVSDelegateInterface.hpp"
 
 /**

@@ -1,8 +1,4 @@
-#include <string.h>
-#include <MultiPrinterLoggerInterface.hpp>
-
 #include "DatabaseAPI.hpp"
-#include "NVSDelegateInterface.hpp"
 
 // Constructor for DatabaseAPI
 DatabaseAPI::DatabaseAPI(NVSDelegateInterface *nvsDelegate, const char *nvsNamespace, MultiPrinterLoggerInterface *logger) : _nvsDelegate(nvsDelegate), _logger(logger)
