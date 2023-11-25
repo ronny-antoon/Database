@@ -3,6 +3,7 @@
 
 #include <nvs.h>
 #include <string.h>
+#include <MultiPrinterLoggerInterface.hpp>
 
 #include "NVSDelegateInterface.hpp"
 
@@ -14,8 +15,10 @@ class NVSDelegate : public NVSDelegateInterface
 public:
     /**
      * @brief Default constructor for NVSDelegate.
+     *
+     * @param logger Pointer to the logger interface.
      */
-    NVSDelegate() = default;
+    NVSDelegate(MultiPrinterLoggerInterface *logger = nullptr);
 
     /**
      * @brief Default destructor for NVSDelegate.
@@ -104,6 +107,12 @@ public:
      *         - NVS_DELEGATE_UNKOWN_ERROR: Unknown error.
      */
     NVSDelegateError_t erase_all(NVSDelegateHandle_t handle) override;
+
+private:
+    /**
+     * @brief Pointer to the logger interface.
+     */
+    MultiPrinterLoggerInterface *m_logger;
 };
 
 #endif // NVS_DELEGATE_H

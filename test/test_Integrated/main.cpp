@@ -1,4 +1,4 @@
-#ifdef GOOGLE_UNIT_TEST
+
 #include <Arduino.h>
 #include <gtest/gtest.h>
 
@@ -21,4 +21,3 @@ void loop()
 
     delay(10000);
 }
-#endif // GOOGLE_UNIT_TEST

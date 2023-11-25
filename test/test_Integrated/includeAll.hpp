@@ -4,3 +4,4 @@
 #include "IsExist_test.hpp"
 #include "GetValueLength_test.hpp"
 #include "EraseAll_test.hpp"
+#include "Heap_test.hpp"

@@ -5,3 +5,4 @@
 #include "GetValueLength_test.hpp"
 #include "EraseAll_test.hpp"
 #include "errToStr_test.hpp"
+#include "Heap_test.hpp"
