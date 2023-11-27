@@ -104,6 +104,15 @@ public:
     virtual DatabaseError_t eraseAll() = 0;
 
     /**
+     * @brief eraseFlashAll - Format the Flash partition.
+     *
+     * @return DatabaseError_t indicating the success or failure of the operation.
+     *         - DATABASE_OK: Operation successful.
+     *         - DATABASE_ERROR: General database error.
+     */
+    virtual DatabaseError_t eraseFlashAll() = 0;
+
+    /**
      * @brief Converts a DatabaseError_t value to a human-readable error string.
      *
      * @param error The DatabaseError_t value to convert.

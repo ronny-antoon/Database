@@ -2,6 +2,7 @@
 #define NVS_DELEGATE_H
 
 #include <nvs.h>
+#include <nvs_flash.h>
 #include <string.h>
 #include <MultiPrinterLoggerInterface.hpp>
 
@@ -107,6 +108,15 @@ public:
      *         - NVS_DELEGATE_UNKOWN_ERROR: Unknown error.
      */
     NVSDelegateError_t erase_all(NVSDelegateHandle_t handle) override;
+
+    /**
+     * @brief Erases all keys and values from all non-volatile storage namespaces.
+     *
+     * @return NVSDelegateError_t indicating the success or failure of the operation.
+     *         - NVS_DELEGATE_OK: Operation successful.
+     *         - NVS_DELEGATE_UNKOWN_ERROR: Unknown error.
+     */
+    NVSDelegateError_t erase_flash_all() override;
 
 private:
     /**

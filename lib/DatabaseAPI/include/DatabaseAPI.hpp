@@ -100,6 +100,15 @@ public:
     DatabaseError_t eraseAll() override;
 
     /**
+     * @brief eraseFlashAll - Format the Flash partition.
+     *
+     * @return DatabaseError_t indicating the success or failure of the operation.
+     *         - DATABASE_OK: Operation successful.
+     *         - DATABASE_ERROR: General database error.
+     */
+    DatabaseError_t eraseFlashAll() override;
+
+    /**
      * @brief Converts a DatabaseError_t value to a human-readable error string.
      *
      * @param error The DatabaseError_t value to convert.

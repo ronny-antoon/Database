@@ -188,3 +188,22 @@ NVSDelegateError_t NVSDelegate::erase_all(NVSDelegateHandle_t handle)
     Log_Error(m_logger, "NVSDelegate erase_all error: Unknown error");
     return NVSDelegateError_t::NVS_DELEGATE_UNKOWN_ERROR;
 }
+
+NVSDelegateError_t NVSDelegate::erase_flash_all()
+{
+    Log_Verbose(m_logger, "NVSDelegate erasing all keys and values from all namespaces");
+    // Attempt to erase all keys and values in all namespaces
+    esp_err_t err = nvs_flash_erase();
+
+    // Map ESP-IDF errors to NVSDelegateError_t
+    switch (err)
+    {
+    case ESP_OK:
+        return NVSDelegateError_t::NVS_DELEGATE_OK;
+    default:
+        break;
+    }
+
+    Log_Error(m_logger, "NVSDelegate erase_flash_all error: Unknown error");
+    return NVSDelegateError_t::NVS_DELEGATE_UNKOWN_ERROR;
+}

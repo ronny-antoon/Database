@@ -132,6 +132,15 @@ public:
      *         - NVS_DELEGATE_UNKOWN_ERROR: Unknown error.
      */
     virtual NVSDelegateError_t erase_all(NVSDelegateHandle_t handle) = 0;
+
+    /**
+     * @brief Erases all keys and values from all non-volatile storage namespaces.
+     *
+     * @return NVSDelegateError_t indicating the success or failure of the operation.
+     *         - NVS_DELEGATE_OK: Operation successful.
+     *         - NVS_DELEGATE_UNKOWN_ERROR: Unknown error.
+     */
+    virtual NVSDelegateError_t erase_flash_all() = 0;
 };
 
 #endif // NVS_DELEGATE_INTERFACE_H

@@ -341,6 +341,30 @@ DatabaseError_t DatabaseAPI::eraseAll()
     return DatabaseError_t::DATABASE_OK;
 }
 
+// Format Flash partition
+DatabaseError_t DatabaseAPI::eraseFlashAll()
+{
+    // Ensure that the NVSDelegate is initialized
+    if (_nvsDelegate == nullptr)
+    {
+        Log_Error(_logger, "DatabaseAPI eraseFlashAll error: NVSDelegate not initialized");
+        return DatabaseError_t::DATABASE_ERROR;
+    }
+
+    // Erase the entire Flash partition
+    NVSDelegateError_t err = _nvsDelegate->erase_flash_all();
+
+    // Handle specific errors and return appropriate DatabaseError_t value
+    if (err != NVSDelegateError_t::NVS_DELEGATE_OK)
+    {
+        Log_Error(_logger, "DatabaseAPI eraseFlashAll error: Failed to erase Flash partition");
+        return DatabaseError_t::DATABASE_ERROR;
+    }
+
+    Log_Debug(_logger, "DatabaseAPI eraseFlashAll: Flash partition erased successfully");
+    return DatabaseError_t::DATABASE_OK;
+}
+
 // Converts a DatabaseError_t value to a human-readable error string
 void DatabaseAPI::errorToString(DatabaseError_t error, char *errorString, uint8_t maxLength)
 {
