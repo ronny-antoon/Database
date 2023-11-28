@@ -5,6 +5,11 @@ NVSDelegate::NVSDelegate(MultiPrinterLoggerInterface *logger) : m_logger(logger)
     Log_Debug(m_logger, "NVSDelegate created");
 }
 
+NVSDelegate::~NVSDelegate()
+{
+    Log_Debug(m_logger, "NVSDelegate destroyed");
+}
+
 NVSDelegateError_t NVSDelegate::open(const char *name, NVSDelegateOpenMode_t open_mode, NVSDelegateHandle_t *out_handle)
 {
     // Check if the namespace name is valid
@@ -119,7 +124,7 @@ NVSDelegateError_t NVSDelegate::get_str(NVSDelegateHandle_t handle, const char *
         Log_Error(m_logger, "NVSDelegate get_str error: Invalid namespace handle");
         return NVSDelegateError_t::NVS_DELEGATE_HANDLE_INVALID;
     case ESP_ERR_NVS_NOT_FOUND:
-        Log_Debug(m_logger, "NVSDelegate get_str error: Key not found");
+        Log_Verbose(m_logger, "NVSDelegate get_str error: Key not found");
         return NVSDelegateError_t::NVS_DELEGATE_KEY_NOT_FOUND;
     default:
         break;

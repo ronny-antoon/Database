@@ -24,7 +24,7 @@ public:
     /**
      * @brief Default destructor for NVSDelegate.
      */
-    ~NVSDelegate() = default;
+    ~NVSDelegate();
 
     /**
      * @brief Opens a namespace in non-volatile storage with the specified name and mode.

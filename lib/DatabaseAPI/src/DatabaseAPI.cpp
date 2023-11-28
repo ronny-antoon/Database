@@ -60,7 +60,7 @@ DatabaseError_t DatabaseAPI::get(const char *key, char *value, size_t maxValueLe
     if (err == NVSDelegateError_t::NVS_DELEGATE_KEY_NOT_FOUND)
     {
         _nvsDelegate->close(handle);
-        Log_Debug(_logger, "DatabaseAPI get: Key '%s' not found", key);
+        Log_Verbose(_logger, "DatabaseAPI get: Key '%s' not found", key);
         return DatabaseError_t::DATABASE_KEY_NOT_FOUND;
     }
 
@@ -84,7 +84,7 @@ DatabaseError_t DatabaseAPI::get(const char *key, char *value, size_t maxValueLe
         return DatabaseError_t::DATABASE_ERROR;
     }
 
-    Log_Debug(_logger, "DatabaseAPI get: Key '%s' retrieved successfully", key);
+    Log_Verbose(_logger, "DatabaseAPI get: Key '%s' retrieved successfully", key);
     return DatabaseError_t::DATABASE_OK;
 }
 
@@ -132,7 +132,7 @@ DatabaseError_t DatabaseAPI::set(const char *key, const char *value)
         return DatabaseError_t::DATABASE_ERROR;
     }
 
-    Log_Debug(_logger, "DatabaseAPI set: Key '%s' set successfully", key);
+    Log_Verbose(_logger, "DatabaseAPI set: Key '%s' set successfully", key);
     return DatabaseError_t::DATABASE_OK;
 }
 
@@ -185,7 +185,7 @@ DatabaseError_t DatabaseAPI::remove(const char *key)
         return DatabaseError_t::DATABASE_ERROR;
     }
 
-    Log_Debug(_logger, "DatabaseAPI remove: Key '%s' removed successfully", key);
+    Log_Verbose(_logger, "DatabaseAPI remove: Key '%s' removed successfully", key);
     return DatabaseError_t::DATABASE_OK;
 }
 
@@ -230,7 +230,7 @@ DatabaseError_t DatabaseAPI::isExist(const char *key)
     // Handle specific errors and return appropriate DatabaseError_t value
     if (err == NVSDelegateError_t::NVS_DELEGATE_KEY_NOT_FOUND)
     {
-        Log_Debug(_logger, "DatabaseAPI isExist: Key '%s' not found", key);
+        Log_Verbose(_logger, "DatabaseAPI isExist: Key '%s' not found", key);
         return DatabaseError_t::DATABASE_KEY_NOT_FOUND;
     }
 
@@ -243,11 +243,11 @@ DatabaseError_t DatabaseAPI::isExist(const char *key)
     // If the length is zero, the key is considered not found
     if (length == 0)
     {
-        Log_Debug(_logger, "DatabaseAPI isExist: Key '%s' not found", key);
+        Log_Verbose(_logger, "DatabaseAPI isExist: Key '%s' not found", key);
         return DatabaseError_t::DATABASE_KEY_NOT_FOUND;
     }
 
-    Log_Debug(_logger, "DatabaseAPI isExist: Key '%s' exists", key);
+    Log_Verbose(_logger, "DatabaseAPI isExist: Key '%s' exists", key);
     return DatabaseError_t::DATABASE_OK;
 }
 
@@ -291,7 +291,7 @@ DatabaseError_t DatabaseAPI::getValueLength(const char *key, size_t *length)
     // Handle specific errors and return appropriate DatabaseError_t value
     if (err == NVSDelegateError_t::NVS_DELEGATE_KEY_NOT_FOUND)
     {
-        Log_Debug(_logger, "DatabaseAPI getValueLength: Key '%s' not found", key);
+        Log_Verbose(_logger, "DatabaseAPI getValueLength: Key '%s' not found", key);
         return DatabaseError_t::DATABASE_KEY_NOT_FOUND;
     }
 
@@ -301,7 +301,7 @@ DatabaseError_t DatabaseAPI::getValueLength(const char *key, size_t *length)
         return DatabaseError_t::DATABASE_ERROR;
     }
 
-    Log_Debug(_logger, "DatabaseAPI getValueLength: Length of value for key '%s' is %zu", key, *length);
+    Log_Verbose(_logger, "DatabaseAPI getValueLength: Length of value for key '%s' is %zu", key, *length);
     return DatabaseError_t::DATABASE_OK;
 }
 
@@ -337,7 +337,7 @@ DatabaseError_t DatabaseAPI::eraseAll()
         return DatabaseError_t::DATABASE_ERROR;
     }
 
-    Log_Debug(_logger, "DatabaseAPI eraseAll: All keys and values erased successfully");
+    Log_Verbose(_logger, "DatabaseAPI eraseAll: All keys and values erased successfully");
     return DatabaseError_t::DATABASE_OK;
 }
 
@@ -361,7 +361,7 @@ DatabaseError_t DatabaseAPI::eraseFlashAll()
         return DatabaseError_t::DATABASE_ERROR;
     }
 
-    Log_Debug(_logger, "DatabaseAPI eraseFlashAll: Flash partition erased successfully");
+    Log_Verbose(_logger, "DatabaseAPI eraseFlashAll: Flash partition erased successfully");
     return DatabaseError_t::DATABASE_OK;
 }
 
