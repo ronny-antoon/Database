@@ -43,7 +43,8 @@ public:
      *         - DATABASE_KEY_NOT_FOUND: Key not found.
      *         - DATABASE_ERROR: General database error.
      */
-    virtual DatabaseError_t get(const char *key, char *value, size_t maxValueLength) = 0;
+    virtual DatabaseError_t get(
+        char const *const key, char *value, size_t maxValueLength) const = 0;
 
     /**
      * @brief Sets the value for the specified key in the database.
@@ -56,7 +57,7 @@ public:
      *         - DATABASE_VALUE_INVALID: Invalid value.
      *         - DATABASE_ERROR: General database error.
      */
-    virtual DatabaseError_t set(const char *key, const char *value) = 0;
+    virtual DatabaseError_t set(char const *const key, char const *const value) = 0;
 
     /**
      * @brief Removes the specified key and its associated value from the database.
@@ -68,7 +69,7 @@ public:
      *         - DATABASE_KEY_NOT_FOUND: Key not found.
      *         - DATABASE_ERROR: General database error.
      */
-    virtual DatabaseError_t remove(const char *key) = 0;
+    virtual DatabaseError_t remove(char const *const key) = 0;
 
     /**
      * @brief Checks if the specified key exists in the database.
@@ -80,7 +81,7 @@ public:
      *         - DATABASE_KEY_NOT_FOUND: Key not found.
      *         - DATABASE_ERROR: General database error.
      */
-    virtual DatabaseError_t isExist(const char *key) = 0;
+    virtual DatabaseError_t isExist(char const *const key) const = 0;
 
     /**
      * @brief Retrieves the length of the value associated with the specified key.
@@ -92,7 +93,8 @@ public:
      *         - DATABASE_KEY_INVALID: Invalid key.
      *         - DATABASE_ERROR: General database error.
      */
-    virtual DatabaseError_t getValueLength(const char *key, size_t *requiredLength) = 0;
+    virtual DatabaseError_t getValueLength(
+        char const *const key, size_t *requiredLength) const = 0;
 
     /**
      * @brief Removes all keys and values from the database.
@@ -119,7 +121,9 @@ public:
      * @param errorString Buffer to store the error string.
      * @param maxLength The maximum length of the error string buffer.
      */
-    virtual void errorToString(DatabaseError_t error, char *errorString, uint8_t maxLength) = 0;
+    virtual void errorToString(
+        DatabaseError_t const error, char *const errorString,
+        uint8_t const maxLength) const = 0;
 };
 
 #endif // DATABASE_API_INTERFACE_H

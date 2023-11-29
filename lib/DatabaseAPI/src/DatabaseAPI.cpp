@@ -1,7 +1,10 @@
 #include "DatabaseAPI.hpp"
 
 // Constructor for DatabaseAPI
-DatabaseAPI::DatabaseAPI(NVSDelegateInterface *nvsDelegate, const char *nvsNamespace, MultiPrinterLoggerInterface *logger) : _nvsDelegate(nvsDelegate), _logger(logger)
+DatabaseAPI::DatabaseAPI(
+    NVSDelegateInterface *const nvsDelegate, char const *const nvsNamespace,
+    MultiPrinterLoggerInterface *const logger)
+    : _nvsDelegate(nvsDelegate), _logger(logger)
 {
     // If the provided namespace is invalid, use the default namespace "DEFAULT_NVS"
     if (nvsNamespace == nullptr || strlen(nvsNamespace) >= NVS_DELEGATE_MAX_NAMESPACE_LENGTH || strlen(nvsNamespace) == 0)
@@ -19,7 +22,8 @@ DatabaseAPI::~DatabaseAPI()
 }
 
 // Retrieves the value associated with the specified key from the database
-DatabaseError_t DatabaseAPI::get(const char *key, char *value, size_t maxValueLength)
+DatabaseError_t DatabaseAPI::get(
+    char const *const key, char *value, size_t maxValueLength) const
 {
     // Ensure that the NVSDelegate is initialized
     if (_nvsDelegate == nullptr)
@@ -89,7 +93,7 @@ DatabaseError_t DatabaseAPI::get(const char *key, char *value, size_t maxValueLe
 }
 
 // Sets the value for the specified key in the database
-DatabaseError_t DatabaseAPI::set(const char *key, const char *value)
+DatabaseError_t DatabaseAPI::set(char const *const key, char const *const value)
 {
     // Ensure that the NVSDelegate is initialized
     if (_nvsDelegate == nullptr)
@@ -137,7 +141,7 @@ DatabaseError_t DatabaseAPI::set(const char *key, const char *value)
 }
 
 // Removes the specified key and its associated value from the database
-DatabaseError_t DatabaseAPI::remove(const char *key)
+DatabaseError_t DatabaseAPI::remove(char const *const key)
 {
     // Ensure that the NVSDelegate is initialized
     if (_nvsDelegate == nullptr)
@@ -190,7 +194,7 @@ DatabaseError_t DatabaseAPI::remove(const char *key)
 }
 
 // Checks if the specified key exists in the database
-DatabaseError_t DatabaseAPI::isExist(const char *key)
+DatabaseError_t DatabaseAPI::isExist(char const *const key) const
 {
     // Ensure that the NVSDelegate is initialized
     if (_nvsDelegate == nullptr)
@@ -252,7 +256,8 @@ DatabaseError_t DatabaseAPI::isExist(const char *key)
 }
 
 // Retrieves the length of the value associated with the specified key
-DatabaseError_t DatabaseAPI::getValueLength(const char *key, size_t *length)
+DatabaseError_t DatabaseAPI::getValueLength(
+    char const *const key, size_t *requiredLength) const
 {
     // Ensure that the NVSDelegate is initialized
     if (_nvsDelegate == nullptr)
@@ -267,7 +272,7 @@ DatabaseError_t DatabaseAPI::getValueLength(const char *key, size_t *length)
         Log_Error(_logger, "DatabaseAPI getValueLength error: Invalid key");
         return DatabaseError_t::DATABASE_KEY_INVALID;
     }
-    if (length == nullptr)
+    if (requiredLength == nullptr)
     {
         Log_Error(_logger, "DatabaseAPI getValueLength error: Invalid length pointer");
         return DatabaseError_t::DATABASE_ERROR;
@@ -283,7 +288,7 @@ DatabaseError_t DatabaseAPI::getValueLength(const char *key, size_t *length)
     }
 
     // Get the length of the value associated with the key
-    err = _nvsDelegate->get_str(handle, key, nullptr, length);
+    err = _nvsDelegate->get_str(handle, key, nullptr, requiredLength);
 
     // Close the NVS namespace
     _nvsDelegate->close(handle);
@@ -301,7 +306,7 @@ DatabaseError_t DatabaseAPI::getValueLength(const char *key, size_t *length)
         return DatabaseError_t::DATABASE_ERROR;
     }
 
-    Log_Verbose(_logger, "DatabaseAPI getValueLength: Length of value for key '%s' is %zu", key, *length);
+    Log_Verbose(_logger, "DatabaseAPI getValueLength: Length of value for key '%s' is %zu", key, *requiredLength);
     return DatabaseError_t::DATABASE_OK;
 }
 
@@ -366,7 +371,9 @@ DatabaseError_t DatabaseAPI::eraseFlashAll()
 }
 
 // Converts a DatabaseError_t value to a human-readable error string
-void DatabaseAPI::errorToString(DatabaseError_t error, char *errorString, uint8_t maxLength)
+void DatabaseAPI::errorToString(
+    DatabaseError_t const error, char *const errorString,
+    uint8_t const maxLength) const
 {
     // Validate input parameters
     if (errorString == nullptr || maxLength < 50)
