@@ -130,6 +130,46 @@ private:
      * @brief Pointer to the logger interface.
      */
     MultiPrinterLoggerInterface *const m_logger;
+
+    /**
+     * @brief Maps NVSDelegateOpenMode_t to nvs_open_mode.
+     *
+     * @param open_mode The NVSDelegateOpenMode_t to map.
+     * @return nvs_open_mode mapped from the given NVSDelegateOpenMode_t.
+     */
+    nvs_open_mode_t const mapOpenMode(NVSDelegateOpenMode_t const open_mode) const;
+
+    /**
+     * @brief Maps esp_err_t to NVSDelegateError_t.
+     *
+     * @param err The esp_err_t to map.
+     * @return NVSDelegateError_t mapped from the given esp_err_t.
+     */
+    NVSDelegateError_t const mapErrorAndPrint(esp_err_t const err) const;
+
+    /**
+     * @brief Checks if the given namespace name is valid.
+     *
+     * @param name The namespace name to check.
+     * @return true if the namespace name is valid, false otherwise.
+     */
+    bool isNamespaceValid(char const *const name) const;
+
+    /**
+     * @brief Checks if the given key is valid.
+     *
+     * @param key The key to check.
+     * @return true if the key is valid, false otherwise.
+     */
+    bool isKeyValid(char const *const key) const;
+
+    /**
+     * @brief Checks if the given value is valid.
+     *
+     * @param value The value to check.
+     * @return true if the value is valid, false otherwise.
+     */
+    bool isValueValid(char const *const value) const;
 };
 
 #endif // NVS_DELEGATE_H

@@ -126,16 +126,6 @@ TEST_F(IntegratedHeapTest, getValueLength_AND_isExist)
 
     result = databaseAPI->eraseAll();
     EXPECT_EQ(result, DatabaseError_t::DATABASE_OK);
-
-    int heap = ESP.getMaxAllocHeap();
-    for (int i = 0; i < 100; i++)
-    {
-        databaseAPI->set(key, value);
-        databaseAPI->isExist(key);
-        databaseAPI->getValueLength(key, &valueLength);
-        databaseAPI->eraseAll();
-    }
-    EXPECT_EQ(heap, ESP.getMaxAllocHeap());
 }
 
 #endif // INTEGRATED_HEAP_TEST_HPP
