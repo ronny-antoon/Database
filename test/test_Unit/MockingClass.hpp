@@ -11,13 +11,13 @@
 class MockNVSDelegate : public NVSDelegateInterface
 {
 public:
-    MOCK_METHOD(NVSDelegateError_t, open, (const char *name, NVSDelegateOpenMode_t open_mode, NVSDelegateHandle_t *out_handle), (override));
-    MOCK_METHOD(void, close, (NVSDelegateHandle_t handle), (override));
-    MOCK_METHOD(NVSDelegateError_t, set_str, (NVSDelegateHandle_t handle, const char *key, const char *value), (override));
-    MOCK_METHOD(NVSDelegateError_t, get_str, (NVSDelegateHandle_t handle, const char *key, char *out_value, size_t *max_out_value_length), (override));
-    MOCK_METHOD(NVSDelegateError_t, erase_key, (NVSDelegateHandle_t handle, const char *key), (override));
-    MOCK_METHOD(NVSDelegateError_t, erase_all, (NVSDelegateHandle_t handle), (override));
-    MOCK_METHOD(NVSDelegateError_t, erase_flash_all, (), (override));
+    MOCK_METHOD(NVSDelegateError_t, open, (char const *const name, NVSDelegateOpenMode_t const open_mode, NVSDelegateHandle_t *out_handle), (const override));
+    MOCK_METHOD(void, close, (NVSDelegateHandle_t handle), (const override));
+    MOCK_METHOD(NVSDelegateError_t, set_str, (NVSDelegateHandle_t handle, char const *const key, char const *const value), (const override));
+    MOCK_METHOD(NVSDelegateError_t, get_str, (NVSDelegateHandle_t handle, char const *const key, char *out_value, size_t *length), (const override));
+    MOCK_METHOD(NVSDelegateError_t, erase_key, (NVSDelegateHandle_t handle, char const *const key), (const override));
+    MOCK_METHOD(NVSDelegateError_t, erase_all, (NVSDelegateHandle_t handle), (const override));
+    MOCK_METHOD(NVSDelegateError_t, erase_flash_all, (), (const override));
 };
 
 #endif // MOCKING_CLASS_HPP

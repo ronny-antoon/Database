@@ -63,14 +63,16 @@ public:
      *         - NVS_DELEGATE_KEY_NOT_FOUND: Namespace not found.
      *         - NVS_DELEGATE_UNKOWN_ERROR: Unknown error.
      */
-    virtual NVSDelegateError_t open(const char *name, NVSDelegateOpenMode_t open_mode, NVSDelegateHandle_t *out_handle) = 0;
+    virtual NVSDelegateError_t open(
+        char const *const name, NVSDelegateOpenMode_t const open_mode,
+        NVSDelegateHandle_t *out_handle) const = 0;
 
     /**
      * @brief Closes the specified non-volatile storage namespace.
      *
      * @param handle The handle of the namespace to close.
      */
-    virtual void close(NVSDelegateHandle_t handle) = 0;
+    virtual void close(NVSDelegateHandle_t handle) const = 0;
 
     /**
      * @brief Sets a string value for the specified key in the given non-volatile storage namespace.
@@ -87,7 +89,9 @@ public:
      *         - NVS_DELEGATE_HANDLE_INVALID: Invalid namespace handle.
      *         - NVS_DELEGATE_UNKOWN_ERROR: Unknown error.
      */
-    virtual NVSDelegateError_t set_str(NVSDelegateHandle_t handle, const char *key, const char *value) = 0;
+    virtual NVSDelegateError_t set_str(
+        NVSDelegateHandle_t handle, char const *const key,
+        char const *const value) const = 0;
 
     /**
      * @brief Gets the string value for the specified key from the given non-volatile storage namespace.
@@ -104,7 +108,9 @@ public:
      *         - NVS_DELEGATE_KEY_NOT_FOUND: Key not found.
      *         - NVS_DELEGATE_UNKOWN_ERROR: Unknown error.
      */
-    virtual NVSDelegateError_t get_str(NVSDelegateHandle_t handle, const char *key, char *out_value, size_t *length) = 0;
+    virtual NVSDelegateError_t get_str(
+        NVSDelegateHandle_t handle, char const *const key,
+        char *out_value, size_t *length) const = 0;
 
     /**
      * @brief Erases the key and its associated value from the specified non-volatile storage namespace.
@@ -119,7 +125,8 @@ public:
      *         - NVS_DELEGATE_READONLY: Attempt to erase in READONLY mode.
      *         - NVS_DELEGATE_UNKOWN_ERROR: Unknown error.
      */
-    virtual NVSDelegateError_t erase_key(NVSDelegateHandle_t handle, const char *key) = 0;
+    virtual NVSDelegateError_t erase_key(
+        NVSDelegateHandle_t handle, char const *const key) const = 0;
 
     /**
      * @brief Erases all keys and values from the specified non-volatile storage namespace.
@@ -131,7 +138,7 @@ public:
      *         - NVS_DELEGATE_READONLY: Attempt to erase in READONLY mode.
      *         - NVS_DELEGATE_UNKOWN_ERROR: Unknown error.
      */
-    virtual NVSDelegateError_t erase_all(NVSDelegateHandle_t handle) = 0;
+    virtual NVSDelegateError_t erase_all(NVSDelegateHandle_t handle) const = 0;
 
     /**
      * @brief Erases all keys and values from all non-volatile storage namespaces.
@@ -140,7 +147,7 @@ public:
      *         - NVS_DELEGATE_OK: Operation successful.
      *         - NVS_DELEGATE_UNKOWN_ERROR: Unknown error.
      */
-    virtual NVSDelegateError_t erase_flash_all() = 0;
+    virtual NVSDelegateError_t erase_flash_all() const = 0;
 };
 
 #endif // NVS_DELEGATE_INTERFACE_H

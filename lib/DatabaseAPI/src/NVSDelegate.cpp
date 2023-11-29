@@ -1,6 +1,6 @@
 #include "NVSDelegate.hpp"
 
-NVSDelegate::NVSDelegate(MultiPrinterLoggerInterface *logger) : m_logger(logger)
+NVSDelegate::NVSDelegate(MultiPrinterLoggerInterface *const logger) : m_logger(logger)
 {
     Log_Debug(m_logger, "NVSDelegate created");
 }
@@ -10,7 +10,9 @@ NVSDelegate::~NVSDelegate()
     Log_Debug(m_logger, "NVSDelegate destroyed");
 }
 
-NVSDelegateError_t NVSDelegate::open(const char *name, NVSDelegateOpenMode_t open_mode, NVSDelegateHandle_t *out_handle)
+NVSDelegateError_t NVSDelegate::open(
+    char const *const name, NVSDelegateOpenMode_t const open_mode,
+    NVSDelegateHandle_t *out_handle) const
 {
     // Check if the namespace name is valid
     if (name == nullptr || strlen(name) >= NVS_DELEGATE_MAX_NAMESPACE_LENGTH || strlen(name) == 0)
@@ -44,14 +46,16 @@ NVSDelegateError_t NVSDelegate::open(const char *name, NVSDelegateOpenMode_t ope
     return NVSDelegateError_t::NVS_DELEGATE_UNKOWN_ERROR;
 }
 
-void NVSDelegate::close(NVSDelegateHandle_t handle)
+void NVSDelegate::close(NVSDelegateHandle_t handle) const
 {
     Log_Verbose(m_logger, "NVSDelegate closing namespace");
     // Close the specified namespace
     nvs_close(handle);
 }
 
-NVSDelegateError_t NVSDelegate::set_str(NVSDelegateHandle_t handle, const char *key, const char *value)
+NVSDelegateError_t NVSDelegate::set_str(
+    NVSDelegateHandle_t handle, char const *const key,
+    char const *const value) const
 {
     // Check if the key and value are valid
     if (key == nullptr || strlen(key) >= NVS_DELEGATE_MAX_KEY_LENGTH || strlen(key) == 0)
@@ -95,7 +99,9 @@ NVSDelegateError_t NVSDelegate::set_str(NVSDelegateHandle_t handle, const char *
     return NVSDelegateError_t::NVS_DELEGATE_UNKOWN_ERROR;
 }
 
-NVSDelegateError_t NVSDelegate::get_str(NVSDelegateHandle_t handle, const char *key, char *out_value, size_t *length)
+NVSDelegateError_t NVSDelegate::get_str(
+    NVSDelegateHandle_t handle, char const *const key,
+    char *out_value, size_t *length) const
 {
     // Check if the key is valid
     if (key == nullptr || strlen(key) >= NVS_DELEGATE_MAX_KEY_LENGTH || strlen(key) == 0)
@@ -134,7 +140,8 @@ NVSDelegateError_t NVSDelegate::get_str(NVSDelegateHandle_t handle, const char *
     return NVSDelegateError_t::NVS_DELEGATE_UNKOWN_ERROR;
 }
 
-NVSDelegateError_t NVSDelegate::erase_key(NVSDelegateHandle_t handle, const char *key)
+NVSDelegateError_t NVSDelegate::erase_key(
+    NVSDelegateHandle_t handle, char const *const key) const
 {
     // Check if the key is valid
     if (key == nullptr || strlen(key) >= NVS_DELEGATE_MAX_KEY_LENGTH || strlen(key) == 0)
@@ -169,7 +176,7 @@ NVSDelegateError_t NVSDelegate::erase_key(NVSDelegateHandle_t handle, const char
     return NVSDelegateError_t::NVS_DELEGATE_UNKOWN_ERROR;
 }
 
-NVSDelegateError_t NVSDelegate::erase_all(NVSDelegateHandle_t handle)
+NVSDelegateError_t NVSDelegate::erase_all(NVSDelegateHandle_t handle) const
 {
     Log_Verbose(m_logger, "NVSDelegate erasing all keys and values");
     // Attempt to erase all keys and values in the specified namespace
@@ -194,7 +201,7 @@ NVSDelegateError_t NVSDelegate::erase_all(NVSDelegateHandle_t handle)
     return NVSDelegateError_t::NVS_DELEGATE_UNKOWN_ERROR;
 }
 
-NVSDelegateError_t NVSDelegate::erase_flash_all()
+NVSDelegateError_t NVSDelegate::erase_flash_all() const
 {
     Log_Verbose(m_logger, "NVSDelegate erasing all keys and values from all namespaces");
     // Attempt to erase all keys and values in all namespaces

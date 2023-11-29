@@ -19,7 +19,7 @@ public:
      *
      * @param logger Pointer to the logger interface.
      */
-    NVSDelegate(MultiPrinterLoggerInterface *logger = nullptr);
+    NVSDelegate(MultiPrinterLoggerInterface *const logger = nullptr);
 
     /**
      * @brief Default destructor for NVSDelegate.
@@ -39,14 +39,16 @@ public:
      *         - NVS_DELEGATE_KEY_NOT_FOUND: Namespace not found.
      *         - NVS_DELEGATE_UNKOWN_ERROR: Unknown error.
      */
-    NVSDelegateError_t open(const char *name, NVSDelegateOpenMode_t open_mode, NVSDelegateHandle_t *out_handle) override;
+    NVSDelegateError_t open(
+        char const *const name, NVSDelegateOpenMode_t const open_mode,
+        NVSDelegateHandle_t *out_handle) const override;
 
     /**
      * @brief Closes the specified non-volatile storage namespace.
      *
      * @param handle The handle of the namespace to close.
      */
-    void close(NVSDelegateHandle_t handle) override;
+    void close(NVSDelegateHandle_t handle) const override;
 
     /**
      * @brief Sets a string value for the specified key in the given non-volatile storage namespace.
@@ -63,7 +65,9 @@ public:
      *         - NVS_DELEGATE_HANDLE_INVALID: Invalid namespace handle.
      *         - NVS_DELEGATE_UNKOWN_ERROR: Unknown error.
      */
-    NVSDelegateError_t set_str(NVSDelegateHandle_t handle, const char *key, const char *value) override;
+    NVSDelegateError_t set_str(
+        NVSDelegateHandle_t handle, char const *const key,
+        char const *const value) const override;
 
     /**
      * @brief Gets the string value for the specified key from the given non-volatile storage namespace.
@@ -80,7 +84,9 @@ public:
      *         - NVS_DELEGATE_KEY_NOT_FOUND: Key not found.
      *         - NVS_DELEGATE_UNKOWN_ERROR: Unknown error.
      */
-    NVSDelegateError_t get_str(NVSDelegateHandle_t handle, const char *key, char *out_value, size_t *length) override;
+    NVSDelegateError_t get_str(
+        NVSDelegateHandle_t handle, char const *const key,
+        char *out_value, size_t *length) const override;
 
     /**
      * @brief Erases the key and its associated value from the specified non-volatile storage namespace.
@@ -95,7 +101,8 @@ public:
      *         - NVS_DELEGATE_READONLY: Attempt to erase in READONLY mode.
      *         - NVS_DELEGATE_UNKOWN_ERROR: Unknown error.
      */
-    NVSDelegateError_t erase_key(NVSDelegateHandle_t handle, const char *key) override;
+    NVSDelegateError_t erase_key(
+        NVSDelegateHandle_t handle, char const *const key) const override;
 
     /**
      * @brief Erases all keys and values from the specified non-volatile storage namespace.
@@ -107,7 +114,7 @@ public:
      *         - NVS_DELEGATE_READONLY: Attempt to erase in READONLY mode.
      *         - NVS_DELEGATE_UNKOWN_ERROR: Unknown error.
      */
-    NVSDelegateError_t erase_all(NVSDelegateHandle_t handle) override;
+    NVSDelegateError_t erase_all(NVSDelegateHandle_t handle) const override;
 
     /**
      * @brief Erases all keys and values from all non-volatile storage namespaces.
@@ -116,13 +123,13 @@ public:
      *         - NVS_DELEGATE_OK: Operation successful.
      *         - NVS_DELEGATE_UNKOWN_ERROR: Unknown error.
      */
-    NVSDelegateError_t erase_flash_all() override;
+    NVSDelegateError_t erase_flash_all() const override;
 
 private:
     /**
      * @brief Pointer to the logger interface.
      */
-    MultiPrinterLoggerInterface *m_logger;
+    MultiPrinterLoggerInterface *const m_logger;
 };
 
 #endif // NVS_DELEGATE_H
