@@ -118,9 +118,9 @@ public:
     void errorToString(DatabaseError_t error, char *errorString, uint8_t maxLength) override;
 
 private:
-    NVSDelegateInterface *_nvsDelegate;   /**< Pointer to the NVSDelegateInterface instance. */
-    char _nvsNamespace[16];               /**< The namespace to use in non-volatile storage. */
-    MultiPrinterLoggerInterface *_logger; /**< Pointer to the MultiPrinterLoggerInterface instance. */
+    NVSDelegateInterface *_nvsDelegate;                    /**< Pointer to the NVSDelegateInterface instance. */
+    char _nvsNamespace[NVS_DELEGATE_MAX_NAMESPACE_LENGTH]; /**< The namespace to use in non-volatile storage. */
+    MultiPrinterLoggerInterface *_logger;                  /**< Pointer to the MultiPrinterLoggerInterface instance. */
 };
 
 #endif // DATABASE_API_H
