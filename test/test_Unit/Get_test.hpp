@@ -77,6 +77,8 @@ TEST_F(GetTest, DATABASE_OK)
 
     EXPECT_CALL(*mockNVSDelegate, close(::testing::_)).Times(1);
 
+    
+
     // act
     DatabaseError_t err = databaseAPI->get(key, actualValue, maxValueLength);
     // assert

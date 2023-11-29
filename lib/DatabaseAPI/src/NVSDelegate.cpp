@@ -124,6 +124,16 @@ NVSDelegateError_t NVSDelegate::erase_flash_all() const
     return mapErrorAndPrint(err);
 }
 
+NVSDelegateError_t NVSDelegate::commit(NVSDelegateHandle_t handle) const
+{
+    Log_Verbose(m_logger, "Committing changes to namespace");
+    // Attempt to commit any pending changes to the specified namespace
+    esp_err_t err = nvs_commit(handle);
+
+    // Map ESP-IDF errors to NVSDelegateError_t
+    return mapErrorAndPrint(err);
+}
+
 nvs_open_mode_t const NVSDelegate::mapOpenMode(NVSDelegateOpenMode_t const open_mode) const
 {
     return (open_mode == NVSDelegateOpenMode_t::NVSDelegate_READONLY)

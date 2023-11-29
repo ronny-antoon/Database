@@ -11,7 +11,7 @@
 /**
  * @brief Enumeration representing possible errors during NVS (Non-Volatile Storage) operations.
  */
-enum class NVSDelegateError_t : uint8_t
+enum NVSDelegateError_t : uint8_t
 {
     NVS_DELEGATE_OK,                 ///< Operation successful.
     NVS_DELEGATE_KEY_INVALID,        ///< Invalid key.
@@ -148,6 +148,18 @@ public:
      *         - NVS_DELEGATE_UNKOWN_ERROR: Unknown error.
      */
     virtual NVSDelegateError_t erase_flash_all() const = 0;
+
+    /**
+     * @brief Commits any pending changes to the specified non-volatile storage namespace.
+     *
+     * @param handle The handle of the namespace.
+     * @return NVSDelegateError_t indicating the success or failure of the operation.
+     *         - NVS_DELEGATE_OK: Operation successful.
+     *         - NVS_DELEGATE_HANDLE_INVALID: Invalid namespace handle.
+     *         - NVS_DELEGATE_READONLY: Attempt to commit in READONLY mode.
+     *         - NVS_DELEGATE_UNKOWN_ERROR: Unknown error.
+     */
+    virtual NVSDelegateError_t commit(NVSDelegateHandle_t handle) const = 0;
 };
 
 #endif // NVS_DELEGATE_INTERFACE_H

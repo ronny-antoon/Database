@@ -112,21 +112,26 @@ public:
      */
     DatabaseError_t eraseFlashAll() override;
 
-    /**
-     * @brief Converts a DatabaseError_t value to a human-readable error string.
-     *
-     * @param error The DatabaseError_t value to convert.
-     * @param errorString Buffer to store the error string.
-     * @param maxLength The maximum length of the error string buffer.
-     */
-    void errorToString(
-        DatabaseError_t const error, char *const errorString,
-        uint8_t const maxLength) const override;
-
 private:
     NVSDelegateInterface *const _nvsDelegate;              /**< Pointer to the NVSDelegateInterface instance. */
     char _nvsNamespace[NVS_DELEGATE_MAX_NAMESPACE_LENGTH]; /**< The namespace to use in non-volatile storage. */
     MultiPrinterLoggerInterface *const _logger;            /**< Pointer to the MultiPrinterLoggerInterface instance. */
+
+    /**
+     * @brief Maps the given NVSDelegateError_t value to a DatabaseError_t value.
+     *
+     * @param err The NVSDelegateError_t value to map.
+     * @return DatabaseError_t The mapped DatabaseError_t value.
+     */
+    DatabaseError_t const mapErrorAndPrint(NVSDelegateError_t const err) const;
+
+    /**
+     * @brief Checks if the given key is valid.
+     *
+     * @param key The key to check.
+     * @return true if the key is valid, false otherwise.
+     */
+    bool isKeyValid(char const *const key) const;
 };
 
 #endif // DATABASE_API_H

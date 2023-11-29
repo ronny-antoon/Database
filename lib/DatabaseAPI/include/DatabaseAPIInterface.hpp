@@ -113,17 +113,6 @@ public:
      *         - DATABASE_ERROR: General database error.
      */
     virtual DatabaseError_t eraseFlashAll() = 0;
-
-    /**
-     * @brief Converts a DatabaseError_t value to a human-readable error string.
-     *
-     * @param error The DatabaseError_t value to convert.
-     * @param errorString Buffer to store the error string.
-     * @param maxLength The maximum length of the error string buffer.
-     */
-    virtual void errorToString(
-        DatabaseError_t const error, char *const errorString,
-        uint8_t const maxLength) const = 0;
 };
 
 #endif // DATABASE_API_INTERFACE_H

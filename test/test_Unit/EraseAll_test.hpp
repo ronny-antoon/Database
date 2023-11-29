@@ -62,6 +62,9 @@ TEST_F(EraseAllTest, DATABASE_OK)
 
     EXPECT_CALL(*mockNVSDelegate, close(::testing::_)).Times(1);
 
+    EXPECT_CALL(*mockNVSDelegate, commit(::testing::_))
+        .WillRepeatedly(::testing::Return(NVSDelegateError_t::NVS_DELEGATE_OK));
+
     // act
     DatabaseError_t err = databaseAPI->eraseAll();
     // assert

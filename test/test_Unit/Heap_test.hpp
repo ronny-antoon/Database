@@ -77,8 +77,8 @@ TEST_F(HeapTest, get_MaxHeapSize)
         // act
         err = databaseAPI->get(key, actualValue, maxValueLength);
         // assert
-        EXPECT_EQ(err, DatabaseError_t::DATABASE_OK);
-        EXPECT_STREQ(actualValue, expectedValue);
+        ASSERT_EQ(err, DatabaseError_t::DATABASE_OK);
+        ASSERT_STREQ(actualValue, expectedValue);
     }
     EXPECT_EQ(maxHeapSize, ESP.getMaxAllocHeap());
 }
@@ -102,6 +102,9 @@ TEST_F(HeapTest, set_MaxHeapSize)
     EXPECT_CALL(*mockNVSDelegate, close(::testing::_))
         .WillRepeatedly(::testing::Return());
 
+    EXPECT_CALL(*mockNVSDelegate, commit(::testing::_))
+        .WillRepeatedly(::testing::Return(NVSDelegateError_t::NVS_DELEGATE_OK));
+
     // act
     err = databaseAPI->set(key, value);
     // assert
@@ -113,7 +116,7 @@ TEST_F(HeapTest, set_MaxHeapSize)
         // act
         err = databaseAPI->set(key, value);
         // assert
-        EXPECT_EQ(err, DatabaseError_t::DATABASE_OK);
+        ASSERT_EQ(err, DatabaseError_t::DATABASE_OK);
     }
     EXPECT_EQ(maxHeapSize, ESP.getMaxAllocHeap());
 }
@@ -136,6 +139,9 @@ TEST_F(HeapTest, remove_MaxHeapSize)
     EXPECT_CALL(*mockNVSDelegate, close(::testing::_))
         .WillRepeatedly(::testing::Return());
 
+    EXPECT_CALL(*mockNVSDelegate, commit(::testing::_))
+        .WillRepeatedly(::testing::Return(NVSDelegateError_t::NVS_DELEGATE_OK));
+
     // act
     err = databaseAPI->remove(key);
     // assert
@@ -147,7 +153,7 @@ TEST_F(HeapTest, remove_MaxHeapSize)
         // act
         err = databaseAPI->remove(key);
         // assert
-        EXPECT_EQ(err, DatabaseError_t::DATABASE_OK);
+        ASSERT_EQ(err, DatabaseError_t::DATABASE_OK);
     }
     EXPECT_EQ(maxHeapSize, ESP.getMaxAllocHeap());
 }
@@ -179,10 +185,9 @@ TEST_F(HeapTest, isExist_MaxHeapSize)
         // act
         err = databaseAPI->isExist(key);
         // assert
-        EXPECT_EQ(err, DatabaseError_t::DATABASE_OK);
+        ASSERT_EQ(err, DatabaseError_t::DATABASE_OK);
     }
     EXPECT_EQ(maxHeapSize, ESP.getMaxAllocHeap());
-
 }
 
 // getValueLength
@@ -214,8 +219,8 @@ TEST_F(HeapTest, getValueLength_MaxHeapSize)
         // act
         err = databaseAPI->getValueLength(key, &requiredLength);
         // assert
-        EXPECT_EQ(err, DatabaseError_t::DATABASE_OK);
-        EXPECT_EQ(requiredLength, strlen(key));
+        ASSERT_EQ(err, DatabaseError_t::DATABASE_OK);
+        ASSERT_EQ(requiredLength, strlen(key));
     }
     EXPECT_EQ(maxHeapSize, ESP.getMaxAllocHeap());
 }
@@ -235,6 +240,9 @@ TEST_F(HeapTest, eraseAll_MaxHeapSize)
     EXPECT_CALL(*mockNVSDelegate, close(::testing::_))
         .WillRepeatedly(::testing::Return());
 
+    EXPECT_CALL(*mockNVSDelegate, commit(::testing::_))
+        .WillRepeatedly(::testing::Return(NVSDelegateError_t::NVS_DELEGATE_OK));
+
     // act
     err = databaseAPI->eraseAll();
     // assert
@@ -246,40 +254,7 @@ TEST_F(HeapTest, eraseAll_MaxHeapSize)
         // act
         err = databaseAPI->eraseAll();
         // assert
-        EXPECT_EQ(err, DatabaseError_t::DATABASE_OK);
-    }
-    EXPECT_EQ(maxHeapSize, ESP.getMaxAllocHeap());
-}
-
-// errorToString
-TEST_F(HeapTest, errorToString_MaxHeapSize)
-{
-    // arrange
-    char resault[50];
-    DatabaseError_t err;
-
-    // act
-    databaseAPI->errorToString(DatabaseError_t::DATABASE_OK, resault, 50);
-    databaseAPI->errorToString(DatabaseError_t::DATABASE_KEY_INVALID, resault, 50);
-    databaseAPI->errorToString(DatabaseError_t::DATABASE_VALUE_INVALID, resault, 50);
-    databaseAPI->errorToString(DatabaseError_t::DATABASE_KEY_NOT_FOUND, resault, 50);
-    databaseAPI->errorToString(DatabaseError_t::DATABASE_KEY_ALREADY_EXISTS, resault, 50);
-    databaseAPI->errorToString(DatabaseError_t::DATABASE_NAMESPACE_INVALID, resault, 50);
-    databaseAPI->errorToString(DatabaseError_t::DATABASE_NOT_ENOUGH_SPACE, resault, 50);
-    databaseAPI->errorToString(DatabaseError_t::DATABASE_ERROR, resault, 50);
-
-    int maxHeapSize = ESP.getMaxAllocHeap();
-    for (int i = 0; i < 100; i++)
-    {
-        // act
-        databaseAPI->errorToString(DatabaseError_t::DATABASE_OK, resault, 50);
-        databaseAPI->errorToString(DatabaseError_t::DATABASE_KEY_INVALID, resault, 50);
-        databaseAPI->errorToString(DatabaseError_t::DATABASE_VALUE_INVALID, resault, 50);
-        databaseAPI->errorToString(DatabaseError_t::DATABASE_KEY_NOT_FOUND, resault, 50);
-        databaseAPI->errorToString(DatabaseError_t::DATABASE_KEY_ALREADY_EXISTS, resault, 50);
-        databaseAPI->errorToString(DatabaseError_t::DATABASE_NAMESPACE_INVALID, resault, 50);
-        databaseAPI->errorToString(DatabaseError_t::DATABASE_NOT_ENOUGH_SPACE, resault, 50);
-        databaseAPI->errorToString(DatabaseError_t::DATABASE_ERROR, resault, 50);
+        ASSERT_EQ(err, DatabaseError_t::DATABASE_OK);
     }
     EXPECT_EQ(maxHeapSize, ESP.getMaxAllocHeap());
 }

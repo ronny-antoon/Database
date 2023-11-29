@@ -18,6 +18,7 @@ public:
     MOCK_METHOD(NVSDelegateError_t, erase_key, (NVSDelegateHandle_t handle, char const *const key), (const override));
     MOCK_METHOD(NVSDelegateError_t, erase_all, (NVSDelegateHandle_t handle), (const override));
     MOCK_METHOD(NVSDelegateError_t, erase_flash_all, (), (const override));
+    MOCK_METHOD(NVSDelegateError_t, commit, (NVSDelegateHandle_t handle), (const override));
 };
 
 #endif // MOCKING_CLASS_HPP

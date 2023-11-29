@@ -125,6 +125,18 @@ public:
      */
     NVSDelegateError_t erase_flash_all() const override;
 
+    /**
+     * @brief Commits any pending changes to the specified non-volatile storage namespace.
+     *
+     * @param handle The handle of the namespace.
+     * @return NVSDelegateError_t indicating the success or failure of the operation.
+     *         - NVS_DELEGATE_OK: Operation successful.
+     *         - NVS_DELEGATE_HANDLE_INVALID: Invalid namespace handle.
+     *         - NVS_DELEGATE_READONLY: Attempt to commit in READONLY mode.
+     *         - NVS_DELEGATE_UNKOWN_ERROR: Unknown error.
+     */
+    NVSDelegateError_t commit(NVSDelegateHandle_t handle) const override;
+
 private:
     /**
      * @brief Pointer to the logger interface.
