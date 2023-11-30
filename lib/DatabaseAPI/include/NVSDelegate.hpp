@@ -157,7 +157,15 @@ private:
      * @param err The esp_err_t to map.
      * @return NVSDelegateError_t mapped from the given esp_err_t.
      */
-    NVSDelegateError_t const mapErrorAndPrint(esp_err_t const err) const;
+    NVSDelegateError_t mapErrorAndPrint(esp_err_t const err) const;
+
+    /**
+     * @brief Prints the given error and returns it.
+     *
+     * @param error The error to print and return.
+     * @return The given error.
+     */
+    NVSDelegateError_t printAndReturnError(NVSDelegateError_t const error) const;
 
     /**
      * @brief Checks if the given namespace name is valid.

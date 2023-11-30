@@ -15,12 +15,12 @@ enum NVSDelegateError_t : uint8_t
 {
     NVS_DELEGATE_OK,                 ///< Operation successful.
     NVS_DELEGATE_KEY_INVALID,        ///< Invalid key.
-    NVS_DELEGATE_NOT_ENOUGH_SPACE,   ///< Not enough space in the storage.
+    NVS_DELEGATE_VALUE_INVALID,      ///< Invalid value.
     NVS_DELEGATE_NAMESPACE_INVALID,  ///< Invalid namespace name.
+    NVS_DELEGATE_KEY_NOT_FOUND,      ///< Key not found.
+    NVS_DELEGATE_NOT_ENOUGH_SPACE,   ///< Not enough space in the storage.
     NVS_DELEGATE_HANDLE_INVALID,     ///< Invalid namespace handle.
     NVS_DELEGATE_READONLY,           ///< Attempt to modify in READONLY mode.
-    NVS_DELEGATE_VALUE_INVALID,      ///< Invalid value.
-    NVS_DELEGATE_KEY_NOT_FOUND,      ///< Key not found.
     NVS_DELEGATE_KEY_ALREADY_EXISTS, ///< Key already exists.
     NVS_DELEGATE_UNKOWN_ERROR        ///< Unknown error.
 };

@@ -16,10 +16,7 @@ NVSDelegateError_t NVSDelegate::open(
 {
     // Check if the namespace name is valid
     if (!isNamespaceValid(name))
-    {
-        Log_Error(m_logger, "NVSDelegate open error: Invalid namespace name");
-        return NVSDelegateError_t::NVS_DELEGATE_NAMESPACE_INVALID;
-    }
+        return printAndReturnError(NVS_DELEGATE_NAMESPACE_INVALID);
 
     // Attempt to open the namespace
     esp_err_t err = nvs_open(name, mapOpenMode(open_mode), out_handle);
@@ -41,16 +38,10 @@ NVSDelegateError_t NVSDelegate::set_str(
 {
     // Check if the key and value are valid
     if (!isKeyValid(key))
-    {
-        Log_Error(m_logger, "NVSDelegate set_str error: Invalid key");
-        return NVSDelegateError_t::NVS_DELEGATE_KEY_INVALID;
-    }
+        return printAndReturnError(NVS_DELEGATE_KEY_INVALID);
 
     if (!isValueValid(value))
-    {
-        Log_Error(m_logger, "NVSDelegate set_str error: Invalid value");
-        return NVSDelegateError_t::NVS_DELEGATE_VALUE_INVALID;
-    }
+        return printAndReturnError(NVS_DELEGATE_VALUE_INVALID);
 
     Log_Verbose(m_logger, "NVSDelegate setting key '%s' to value '%s'", key, value);
     // Attempt to set the string value for the specified key
@@ -66,17 +57,11 @@ NVSDelegateError_t NVSDelegate::get_str(
 {
     // Check if the key is valid
     if (!isKeyValid(key))
-    {
-        Log_Error(m_logger, "NVSDelegate get_str error: Invalid key");
-        return NVSDelegateError_t::NVS_DELEGATE_KEY_INVALID;
-    }
+        return printAndReturnError(NVS_DELEGATE_KEY_INVALID);
 
     // Check if the length pointer is valid
     if (length == nullptr)
-    {
-        Log_Error(m_logger, "NVSDelegate get_str error: Invalid length pointer");
-        return NVSDelegateError_t::NVS_DELEGATE_VALUE_INVALID;
-    }
+        return printAndReturnError(NVS_DELEGATE_VALUE_INVALID);
 
     Log_Verbose(m_logger, "NVSDelegate getting value for key '%s'", key);
     // Attempt to get the string value for the specified key
@@ -91,10 +76,7 @@ NVSDelegateError_t NVSDelegate::erase_key(
 {
     // Check if the key is valid
     if (!isKeyValid(key))
-    {
-        Log_Error(m_logger, "NVSDelegate erase_key error: Invalid key");
-        return NVSDelegateError_t::NVS_DELEGATE_KEY_INVALID;
-    }
+        return printAndReturnError(NVS_DELEGATE_KEY_INVALID);
 
     Log_Verbose(m_logger, "NVSDelegate erasing key '%s'", key);
     // Attempt to erase the key and its associated value
@@ -141,30 +123,64 @@ nvs_open_mode_t const NVSDelegate::mapOpenMode(NVSDelegateOpenMode_t const open_
                : NVS_READWRITE;
 }
 
-NVSDelegateError_t const NVSDelegate::mapErrorAndPrint(esp_err_t const err) const
+NVSDelegateError_t NVSDelegate::mapErrorAndPrint(esp_err_t const err) const
 {
     switch (err)
     {
     case ESP_OK:
-        return NVSDelegateError_t::NVS_DELEGATE_OK;
+        return printAndReturnError(NVS_DELEGATE_OK);
     case ESP_ERR_NVS_NOT_FOUND:
-        Log_Error(m_logger, "Key not found");
-        return NVSDelegateError_t::NVS_DELEGATE_KEY_NOT_FOUND;
+        return printAndReturnError(NVS_DELEGATE_KEY_NOT_FOUND);
     case ESP_ERR_NVS_NOT_ENOUGH_SPACE:
-        Log_Error(m_logger, "Not enough space");
-        return NVSDelegateError_t::NVS_DELEGATE_NOT_ENOUGH_SPACE;
+        return printAndReturnError(NVS_DELEGATE_NOT_ENOUGH_SPACE);
     case ESP_ERR_NVS_INVALID_HANDLE:
-        Log_Error(m_logger, "Invalid namespace handle");
-        return NVSDelegateError_t::NVS_DELEGATE_HANDLE_INVALID;
+        return printAndReturnError(NVS_DELEGATE_HANDLE_INVALID);
     case ESP_ERR_NVS_READ_ONLY:
+        return printAndReturnError(NVS_DELEGATE_READONLY);
+    default:
+        break;
+    }
+    return printAndReturnError(NVS_DELEGATE_UNKOWN_ERROR);
+}
+
+NVSDelegateError_t NVSDelegate::printAndReturnError(NVSDelegateError_t const error) const
+{
+    switch (error)
+    {
+    case NVS_DELEGATE_OK:
+        break;
+    case NVS_DELEGATE_KEY_INVALID:
+        Log_Error(m_logger, "Invalid key");
+        break;
+    case NVS_DELEGATE_VALUE_INVALID:
+        Log_Error(m_logger, "Invalid value");
+        break;
+    case NVS_DELEGATE_NAMESPACE_INVALID:
+        Log_Error(m_logger, "Invalid namespace name");
+        break;
+    case NVS_DELEGATE_KEY_NOT_FOUND:
+        Log_Error(m_logger, "Key not found");
+        break;
+    case NVS_DELEGATE_NOT_ENOUGH_SPACE:
+        Log_Error(m_logger, "Not enough space");
+        break;
+    case NVS_DELEGATE_HANDLE_INVALID:
+        Log_Error(m_logger, "Invalid namespace handle");
+        break;
+    case NVS_DELEGATE_READONLY:
         Log_Error(m_logger, "Attempt to write in READONLY mode");
-        return NVSDelegateError_t::NVS_DELEGATE_READONLY;
+        break;
+    case NVS_DELEGATE_KEY_ALREADY_EXISTS:
+        Log_Error(m_logger, "Key already exists");
+        break;
+    case NVS_DELEGATE_UNKOWN_ERROR:
+        Log_Error(m_logger, "Unknown error");
+        break;
     default:
         break;
     }
 
-    Log_Error(m_logger, "Unknown error");
-    return NVSDelegateError_t::NVS_DELEGATE_UNKOWN_ERROR;
+    return error;
 }
 
 bool NVSDelegate::isNamespaceValid(const char *const name) const
