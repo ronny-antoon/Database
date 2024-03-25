@@ -102,6 +102,9 @@ NVSDelegateError_t NVSDelegate::erase_flash_all() const
     // Attempt to erase all keys and values in all namespaces
     esp_err_t err = nvs_flash_erase();
 
+    if (err == ESP_OK)
+        err = nvs_flash_init();
+
     // Map ESP-IDF errors to NVSDelegateError_t
     return mapErrorAndPrint(err);
 }
